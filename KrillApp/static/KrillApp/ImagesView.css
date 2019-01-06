@@ -1,0 +1,13 @@
+#ChosenImage{
+    float: left;
+    border:  2px solid;
+    width:75%;
+    height: 100%;
+}
+#SideGallery{
+    float: right;
+    border: 2px solid red;
+    width:25%;
+
+
+}

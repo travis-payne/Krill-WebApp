@@ -1,0 +1,48 @@
+<!-- templates/ImagesView.html -->
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %}ImagesView{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'KrillApp/ImagesView.css' %}">
+
+
+{% if user.is_authenticated %}
+<div id="ChosenImage">
+        {% if images %}
+        <img id="display" src="{{MEDIA_URL}}{{images.0.image_file}}" style='height: 100%; width: 100%; object-fit: contain'/>
+        {% else %}
+        <h3> No Images Uploaded </h3>
+        {% endif %}
+
+</div>
+<div id="SideGallery">
+
+    <ul id="image_list" class="list-group">
+        {% for i in images %}
+        <li class="list-group-item list-group-item-action">{{ i.image_file }}</li>
+        {% endfor %}
+
+
+
+    </ul>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+    $("ul[id*=image_list] li").click(function () {
+      DJANGO_STATIC_URL = '{{MEDIA_URL}}';
+      var image_url = $(this).text(); // gets text contents of clicked li
+      document.getElementById("display").src =  DJANGO_STATIC_URL +image_url;
+
+    });
+});
+
+</script>
+{% endif %}
+{% endblock %}
+
