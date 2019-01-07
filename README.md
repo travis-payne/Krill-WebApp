@@ -17,7 +17,7 @@ pip install Django
 
 
 ## Starting the server
-Simply navigate to the directory and run the following:
+Simply navigate to the project directory and run the following:
 ```
 python manage.py runserver
 ```
