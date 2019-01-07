@@ -17,11 +17,17 @@ def Upload_Image(request):
             return HttpResponseRedirect('/ImagesSuccessful')
     else:
         form = ImageForm()
-    return render(request, 'ImagesUpload.html',{'form':form})
+    return render(request, 'ImagesUpload.html', {'form':form})
 
 
 def Get_User_Images(request):
     sql = 'SELECT * FROM Krillapp_image WHERE user_id="' + str(request.user.id) + '";'
+    urls = []
     images = Image.objects.raw(sql)
-    return render(request ,'ImagesView.html', {'images':images})
+    for image in images:
+        urls.append(str(image.image_file).replace("user_"+str(request.user.id),""))
+    return render(request ,'ImagesView.html', {'images':images,'urls':urls})
 
+def Delete_User_Image(request):
+    Image.objects.filter(image_file=request.POST['image_url']).delete()
+    return HttpResponseRedirect('/ImagesView')

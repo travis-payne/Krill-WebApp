@@ -12,6 +12,8 @@
 
 {% if user.is_authenticated %}
 <div id="ChosenImage">
+    
+
         {% if images %}
         <img id="display" src="{{MEDIA_URL}}{{images.0.image_file}}" style='height: 100%; width: 100%; object-fit: contain'/>
         {% else %}
@@ -20,7 +22,10 @@
 
 </div>
 <div id="SideGallery">
-
+        <div class="center">
+                <button type="button" id="delete_image">Delete Selected Image</button>
+        </div>
+            
     <ul id="image_list" class="list-group">
         {% for i in images %}
         <li class="list-group-item list-group-item-action">{{ i.image_file }}</li>
@@ -43,6 +48,34 @@ $(document).ready(function () {
 });
 
 </script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#delete_image").click(function () {
+            var image_to_delete="";
+            var ul = document.getElementById("image_list");
+            var items = ul.getElementsByTagName("li");
+            var current_image_url = document.getElementById("display").src
+            for (var i = 0; i < items.length; ++i) {
+                if(current_image_url.includes(items[i].textContent)){
+                    console.log(items[i].textContent);
+                    image_to_delete = items[i].textContent;
+                }
+            }
+
+            $.ajax({type: "POST",
+            url: "{% url 'delete_image' %}",
+            data: {image_url: image_to_delete,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            success:function(result){
+                location.reload();
+                //console.log(document.getElementById("display").src)
+            }})
+    
+        });
+    });
+    
+    </script>
 {% endif %}
 {% endblock %}
 

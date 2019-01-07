@@ -29,6 +29,7 @@ urlpatterns = [
     path("ImagesUpload/", views.Upload_Image, name='ImagesUpload'),
     path("acccounts/", include('django.contrib.auth.urls')),
     path("ImagesSuccessful/", TemplateView.as_view(template_name='ImagesSuccessful.html'), name='ImagesSuccessful'),
+    path("delete_image/",views.Delete_User_Image,name='delete_image')
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
