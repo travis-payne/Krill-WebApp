@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'KrillApp',
     'crispy_forms',
+    'django_cleanup',
     
 ]
 
