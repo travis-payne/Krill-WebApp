@@ -10,8 +10,9 @@ python get-pip.py
 ```
 The following packages will need to be installed by typing the following into a command line:
 ```
+pip install django
 pip install --upgrade django-crispy-forms
-pip install Django
+pip install django-cleanup
 ```
 
 
