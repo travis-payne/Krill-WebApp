@@ -8,9 +8,17 @@
 <link rel="stylesheet" type="text/css" href="{% static 'KrillApp/view_trips.css' %}">
 
 <h3>View Trips</h3>
+<br />
+
 <div class="center">
-    <a id="upload_btn" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
+    <div id ="view_trips_buttons">
+        <a id="upload_btn" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
+        <a id="upload_btn" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Delete Trip </a>
+    </div>
 </div>
+
+<br />
+
 
 <ul id="trip_list" class="list-group">
     {% for i in trip_list %}
@@ -20,6 +28,7 @@
 
 
 </ul>
+
 <h4 id="Trip_Name"></h4>
 
 <ul id="trip_image_list" class="list-group">
@@ -66,6 +75,24 @@
 
             }})
     
+        });
+
+        $("ul[id*=trip_image_list] li").live('click',function () {
+            console.log("yup");
+            DJANGO_STATIC_URL = '{{MEDIA_URL}}';
+            var image_url = $(this).text(); // gets text contents of clicked li
+
+            $.ajax({
+              type: "POST",
+              url: "{% url 'view_trip_image' %}",
+              data: {image_url: DJANGO_STATIC_URL + image_url,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success:function(result){
+                    document.write(result);
+
+                }
+          })
+
         });
     
     </script>

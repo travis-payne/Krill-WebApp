@@ -77,4 +77,9 @@ def Upload_Image_To_Trip(request):
 
 def Delete_User_Image(request):
     Image.objects.filter(image_file=request.POST['image_url']).delete()
-    return HttpResponseRedirect('/images_view')
+    return HttpResponseRedirect('/view_trips')
+
+
+def View_Trip_Image(request):
+    html = render_to_string('view_trip_image.html',{'image_url':request.POST['image_url']},request=request)
+    return HttpResponse(html)
