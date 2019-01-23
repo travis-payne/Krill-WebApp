@@ -1,0 +1,21 @@
+<!-- templates/ImagesView.html -->
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}images_upload{% endblock %}
+
+
+{% block content %}
+<div class="center">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy}}
+    <button type="submit">Upload</button>
+  </form>
+</div>
+
+
+{% endblock %}

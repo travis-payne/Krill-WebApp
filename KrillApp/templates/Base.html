@@ -24,11 +24,18 @@
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
             <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'ImagesUpload' %}">Upload Image</a>
+                <a class="nav-link" href="{% url 'create_trip' %}">Create Trip</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'view_trips' %}">View Trips</a>
+            </li>
+            <!---
+            <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'images_upload' %}">Upload Image</a>
                 </li>
                 <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'ImagesView' %}">View Images</a>
-                    </li>
+                        <a class="nav-link" href="{% url 'images_view' %}">View Images</a>
+                    </li>-->
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>

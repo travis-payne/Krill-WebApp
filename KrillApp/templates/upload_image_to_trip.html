@@ -5,11 +5,10 @@
 {% load crispy_forms_tags %}
 
 
-{% block title %}ImagesUpload{% endblock %}
 
 
 {% block content %}
-{% if user.is_authenticated %}
+
 <div class="center">
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -19,5 +18,4 @@
 </div>
 
 
-{% endif %}
 {% endblock %}

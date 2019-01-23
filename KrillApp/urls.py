@@ -25,11 +25,17 @@ from KrillApp import views
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name='home.html'), name='home'),
-    path("ImagesView/", views.Get_User_Images, name='ImagesView'),
-    path("ImagesUpload/", views.Upload_Image, name='ImagesUpload'),
+    path("images_view/", views.Get_User_Images, name='images_view'),
+    path("images_upload/", views.Upload_Image, name='images_upload'),
     path("acccounts/", include('django.contrib.auth.urls')),
-    path("ImagesSuccessful/", TemplateView.as_view(template_name='ImagesSuccessful.html'), name='ImagesSuccessful'),
-    path("delete_image/",views.Delete_User_Image,name='delete_image')
+    path("images_successful/", TemplateView.as_view(template_name='images_successful.html'), name='images_successful'),
+    path("delete_image/",views.Delete_User_Image,name='delete_image'),
+    path("create_trip/",views.Create_Trip,name='create_trip'),
+    path("view_trips/",views.Get_User_Trips,name='view_trips'),
+    path("get_trip_image_list/",views.Get_Trip_Image_List,name='get_trip_image_list'),
+    path("upload_image_to_trip/",views.Upload_Image_To_Trip,name='upload_image_to_trip')
+
+
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
