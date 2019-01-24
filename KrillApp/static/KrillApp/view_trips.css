@@ -7,8 +7,15 @@ h4{
     text-align: center;
 }
 
+#view_trips_buttons{
+
+    display: static;
+    margin: 0 auto;
+    text-align: center;
+
+}
 #upload_btn{
-    display: block;
+    display: static;
     width: 20%;
     margin: 0 auto;
     margin-bottom: 0.5%;

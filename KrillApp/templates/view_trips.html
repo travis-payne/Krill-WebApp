@@ -9,14 +9,10 @@
 
 <h3>View Trips</h3>
 <br />
-
-<div class="center">
     <div id ="view_trips_buttons">
         <a id="upload_btn" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
         <a id="upload_btn" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Delete Trip </a>
     </div>
-</div>
-
 <br />
 
 
@@ -24,9 +20,6 @@
     {% for i in trip_list %}
     <li class="list-group-item list-group-item-action">{{ i }}</li>
     {% endfor %}
-
-
-
 </ul>
 
 <h4 id="Trip_Name"></h4>
