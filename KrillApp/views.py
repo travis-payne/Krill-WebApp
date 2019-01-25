@@ -60,7 +60,7 @@ def Get_Trip_Image_List(request):
     })
 
 def Delete_Trip(request):
-    Trip.objects.filter(trip_name_id=request.POST['trip_to_delete']).delete()
+    Trip.objects.filter(trip_name=request.POST['trip_to_delete']).delete()
     return HttpResponseRedirect('/view_trips')
 
 
