@@ -34,10 +34,8 @@ urlpatterns = [
     path("view_trips/",views.Get_User_Trips,name='view_trips'),
     path("get_trip_image_list/",views.Get_Trip_Image_List,name='get_trip_image_list'),
     path("upload_image_to_trip/",views.Upload_Image_To_Trip,name='upload_image_to_trip'),
-    path("view_trip_image/",views.View_Trip_Image,name='view_trip_image')
-
-
-
+    path("view_trip_image/",views.View_Trip_Image,name='view_trip_image'),
+    path("delete_trip/",views.Delete_Trip,name='delete_trip')
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

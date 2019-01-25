@@ -11,7 +11,7 @@
 <br />
     <div id ="view_trips_buttons">
         <a id="upload_btn" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
-        <a id="upload_btn" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Delete Trip </a>
+        <a id="upload_btn" class="btn btn-primary" onclick="deleteImage()">Delete Trip </a>
     </div>
 <br />
 
@@ -87,6 +87,27 @@
           })
 
         });
+        function deleteImage(){
+            if (confirm('Are you sure you want to delete this trip and it\'s images?')) {
+                var trip_name = document.getElementById("Trip_Name");
+
+                $.ajax({
+              type: "POST",
+              url: "{% url 'delete_image' %}",
+              data: {trip_to_delete: trip_name ,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success:function(result){
+                    location.reload();
+
+                }
+          })
+            } else {
+                // Do nothing!
+            }
+
+        }
+
+       
     
     </script>
 

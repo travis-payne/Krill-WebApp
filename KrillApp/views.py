@@ -59,6 +59,11 @@ def Get_Trip_Image_List(request):
         'trip_image_list':trip_image_list,
     })
 
+def Delete_Trip(request):
+    Trip.objects.filter(trip_name_id=request.POST['trip_to_delete']).delete()
+    return HttpResponseRedirect('/view_trips')
+
+
 def Upload_Image_To_Trip(request):
     if request.method == 'POST':
         form = ImageForm(request.POST ,request.FILES)
