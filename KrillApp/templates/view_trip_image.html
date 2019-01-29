@@ -7,45 +7,45 @@
 {% block title %}ImagesView{% endblock %}
 
 {% block content %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="{% static 'KrillApp/Javascript/view_trip_image.js' %}" type="text/javascript"></script>
+<script> var csrftoken = '{{ csrf_token }}'; </script>
+
 <link rel="stylesheet" type="text/css" href="{% static 'KrillApp/view_trip_image.css' %}">
 
 
 {% if user.is_authenticated %}
 <div id="ChosenImage">
-    
         <img id="display" src="{{image_url}}" style='height: 100%; width: 100%; object-fit: contain'/>
-   
-
 </div>
 <div id="SideGallery">
         <div class="center">
-                <button type="button" id="delete_image">Delete Selected Image</button>
+                <button type="button" img-url = "{{ raw_url }}" ajax-url = "{% url 'delete_image' %}" id="delete_image">Delete Selected Image</button>
         </div>
 
 </div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-<script type="text/javascript">
+<script>
+
+$(document).on('click','#delete_image',function(){
+        console.log("YEET");
+        var image_to_delete = $("#delete_image").attr("img-url");
+        var url = $("#delete_image").attr("ajax-url");
+ 
+
+        $.ajax({type: "POST",
+        url: url,
+        data: {image_url: image_to_delete,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        success:function(result){
+            location.reload();
+            //console.log(document.getElementById("display").src)
+        }})
+});
+
+</script>
 
 
-        $("#delete_image").click(function () {
-            var image_to_delete = '{{ image_url }}';
-            console.log(image_to_delete);
-            $.ajax({type: "POST",
-            url: "{% url 'delete_image' %}",
-            data: {image_url: image_to_delete,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
-            success:function(result){
-                //location.reload();
-                //console.log(document.getElementById("display").src)
-            }})
-    
-        });
-
-   
-
-    
-    </script>
 {% endif %}
 {% endblock %}
 

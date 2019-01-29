@@ -6,6 +6,9 @@
 
 {% block content %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="{% static 'KrillApp/Javascript/view_trips.js' %}" type="text/javascript"></script>
+<script> var csrftoken = '{{ csrf_token }}'; </script>
+
 
 <link rel="stylesheet" type="text/css" href="{% static 'KrillApp/view_trips.css' %}">
 
@@ -13,20 +16,20 @@
 <br />
     <div id ="view_trips_buttons">
         <a id="upload" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
-        <a id="delete_trip"  style="color:white" class="btn btn-primary">Delete Trip </a>
+        <a id="delete_trip" ajax-url = "{% url 'delete_trip' %}"  style="color:white" class="btn btn-primary">Delete Trip </a>
     </div>
 <br />
 
 
-<ul id="trip_list" class="list-group">
+<ul ajax-url = "{% url 'get_trip_image_list' %}" id="trip_list" class="list-group">
     {% for i in trip_list %}
-    <li class="list-group-item list-group-item-action">{{ i }}</li>
+    <li  class="list-group-item list-group-item-action">{{ i }}</li>
     {% endfor %}
 </ul>
 
 <h4 id="Trip_Name"></h4>
 
-<ul id="trip_image_list" class="list-group">
+<ul ajax-url= "{% url 'view_trip_image' %}"  media-url = "{{ MEDIA_URL }}" id="trip_image_list" class="list-group">
         {% for i in trip_image_list %}
         <li class="list-group-item list-group-item-action">{{ i }}</li>
         {% endfor %}
@@ -34,90 +37,22 @@
     
     
     </ul>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-        $("ul[id*=trip_list] li").click(function () {
-            DJANGO_STATIC_URL = '{{MEDIA_URL}}';
-            var trip_name = $(this).text(); // gets text contents of clicked li
-            document.getElementById("Trip_Name").innerHTML = trip_name;
-            $.ajax({type: "POST",
-            url: "{% url 'get_trip_image_list' %}",
-            data: {trip_to_get: trip_name,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
-            success:function(result){
+        
+<script>
 
-                // Clearing list
-                document.getElementById("trip_image_list").innerHTML = "";
 
-                // Retrieving the list from the django result.
-                var list = document.getElementById("trip_image_list");
-
-                // Converting list to array
-                image_list = Array.from(result.trip_image_list);
-
-                for (var i = 0; i < image_list.length; i++) {
-
-                // Create the list item and give it a class (bootstrap styling)
-                var item = document.createElement('li');
-                item.className = "list-group-item list-group-item-action";
-
-                // Set its contents:
-                item.appendChild(document.createTextNode(image_list[i]));
-                // Add it to the list:
-                list.appendChild(item);
-            }
-
-            document.getElementById("Trip_Name").scrollIntoView(true);
-            }})
-    
-        });
-
-        $("ul[id*=trip_image_list] li").live('click',function () {
-            console.log("yup");
-            DJANGO_STATIC_URL = '{{MEDIA_URL}}';
-            var image_url = $(this).text(); // gets text contents of clicked li
-
-            $.ajax({
-              type: "POST",
-              url: "{% url 'view_trip_image' %}",
-              data: {image_url: DJANGO_STATIC_URL + image_url,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'},
-                success:function(result){
-                    document.write(result);
-
-                }
-          })
-
-        });
-   
-
-  
-    
-    </script>
-    <script>
-    var del_trip_btn = document.getElementById("delete_trip");
-    del_trip_btn.addEventListener("click",function()   {
-        if (confirm('Are you sure you want to delete the trip ' + $("#Trip_Name").text() + ' and it\'s images?')) {
-                var trip_name = document.getElementById("Trip_Name").innerHTML;
-                $.ajax({
-                type: "POST",
-                url: "{% url 'delete_trip' %}",
-                data: {trip_to_delete: trip_name,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
-                    success:function(result){
-                        location.reload();
-
-                    }
-            })
-            } else {
-                // Do nothing!
-            }
-
-    })
     </script>
 
 
+<script>
+    $(function(){
+    $("#delete_image").on("click",(function () {
 
+
+    }));
+
+});
+</script>
 
 {% endblock %}
