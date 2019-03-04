@@ -29,22 +29,27 @@
 
   
   <div class="center">
-      {% csrf_token %}
-  <button type="button" class="btn btn-primary js-upload-photos">
-    <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
-  </button>
+
 
   
-      <form  action="{% url 'basic_upload' %}" method="POST" enctype="multipart/form-data">
         
-        <input id="fileupload" style="display: none;" type="file" name="image_file" multiple>
-        
- 
+  <select id ="trip_list" >
+    {% for trip in trips %}
+        <option value="{{ trip }}">{{ trip }}</option>
+    {% endfor %}
+    </select>
+
+    <div id="fileupload" style:"display:inline">
+      <form action="{% url 'basic_upload' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="fileupload-buttonbar">
+
+                  <input type="file" name="image_file" multiple>
+
+
+
+          </div>
       </form>
-
-
-
-
 
   </div>
 
@@ -53,30 +58,52 @@
 
 
 
-    </div>
 
 
-  <select id ="trip_list" >
-      {% for trip in trips %}
-          <option value="trip">{{ trip}}</option>
-      {% endfor %}
-      </select>
 
   <table id="gallery" class="table table-bordered">
     <thead>
       <tr>
-        <th>Photo</th>
+        <th>Uploaded Photos</th>
       </tr>
     </thead>
     <tbody>
-      {% for photo in photos %}
-        <tr>
-          <td><a href="{{ photo.file.url }}">{{ photo.file.name }}</a></td>
-        </tr>
-      {% endfor %}
+
     </tbody>
   </table>
 </div>
+
+<script type="text/javascript">
+$('#fileupload').fileupload({
+
+    formData: [
+          { name: "csrfmiddlewaretoken", value: "{{ csrf_token }}"},
+
+      ],
+      done: function (e, data) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
+    if (data.result.is_valid) {
+      DJANGO_STATIC_URL = '{{MEDIA_URL}}';
+      $("#gallery tbody").prepend(
+        "<tr><td><a href='" + DJANGO_STATIC_URL + data.result.url + "'>" + data.result.url +"</a></td></tr>"
+      )
+    }
+  }
+  });
+
+  $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+    // The example input, doesn't have to be part of the upload form:
+    var input = $('#trip_list').val();
+    data.formData = [
+    { name: "csrfmiddlewaretoken", value: "{{ csrf_token }}"},
+    { name: "trip_name", value: input}
+    ]
+
+    
+});
+
+
+  </script>
+
 
 
 {% endblock %}

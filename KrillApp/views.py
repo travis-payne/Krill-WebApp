@@ -101,15 +101,15 @@ class BasicUploadView(View):
         return render(self.request, 'upload_image_to_trip.html', {'photos': photos_list})
 
     def post(self, request):
-        print(request.POST[u"trip"])
         form = ImageForm(self.request.POST, self.request.FILES)
         if form.is_valid():
             instance = form.save(commit=False)
+            instance.trip_name = Trip.objects.get(trip_name__exact=request.POST['trip_name'])
             instance.user_name = request.user.username
             instance.user=request.user
-            photo = instance.save()
-            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+            instance.save()
+            print(instance.image_file)
+            data = {'is_valid': True, 'url': str(instance.image_file)}
         else:
-            print(form.errors)
             data = {'is_valid': False}
         return JsonResponse(data)
