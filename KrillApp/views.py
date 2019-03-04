@@ -1,10 +1,12 @@
-from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
+from django.http import HttpResponse ,HttpResponseRedirect ,JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from KrillApp.forms import ImageForm,TripForm
+from KrillApp.forms import ImageForm ,TripForm
 from KrillApp.models import Image, Trip
+from django.views import View
+
 
 def Upload_Image(request):
     if request.method == 'POST':
@@ -41,7 +43,6 @@ def Get_User_Images(request):
     return render(request ,'images_view.html', {'images':images,'urls':urls})
 
 def Get_User_Trips(request):
-    #sql = 'SELECT * FROM Krillapp_trip WHERE user_id="' + str(request.user.id) + '";'
     sql = 'SELECT * FROM Krillapp_trip;'
     trip_list = []
     trips = Trip.objects.raw(sql)
@@ -64,18 +65,22 @@ def Delete_Trip(request):
     return HttpResponseRedirect('/view_trips')
 
 
+# def Upload_Image_To_Trip(request):
+#     if request.method == 'POST':
+#         form = ImageForm(request.POST ,request.FILES)
+#         if form.is_valid():
+#             instance = form.save(commit=False)
+#             instance.user_name = request.user.username
+#             instance.user=request.user
+#             instance.save()
+#             return HttpResponseRedirect('/view_trips')
+#     else:
+#         form = ImageForm()
+#     return render(request,'upload_image_to_trip.html',{'form':form})
+
 def Upload_Image_To_Trip(request):
-    if request.method == 'POST':
-        form = ImageForm(request.POST ,request.FILES)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.user_name = request.user.username
-            instance.user=request.user
-            instance.save()
-            return HttpResponseRedirect('/view_trips')
-    else:
-        form = ImageForm()
-    return render(request,'upload_image_to_trip.html',{'form':form})
+    trips = Trip.objects.all()
+    return render(request,'upload_image_to_trip.html',{'trips':trips})
 
 
 
@@ -89,3 +94,22 @@ def Delete_User_Image(request):
 def View_Trip_Image(request):
     html = render_to_string('view_trip_image.html',{'image_url':request.POST['image_url'],'raw_url':request.POST['stripped_url']},request=request)
     return HttpResponse(html)
+
+class BasicUploadView(View):
+    def get(self, request):
+        photos_list = Image.objects.all()
+        return render(self.request, 'upload_image_to_trip.html', {'photos': photos_list})
+
+    def post(self, request):
+        print(request.POST[u"trip"])
+        form = ImageForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user_name = request.user.username
+            instance.user=request.user
+            photo = instance.save()
+            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+        else:
+            print(form.errors)
+            data = {'is_valid': False}
+        return JsonResponse(data)
