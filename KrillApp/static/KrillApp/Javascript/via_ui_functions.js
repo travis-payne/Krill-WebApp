@@ -3132,10 +3132,10 @@ function img_loading_spinbar(image_index, show) {
 }
 
 function update_img_fn_list() {
-  var regex = document.getElementById('img_fn_list_regex').value;
-  var p = document.getElementById('filelist_preset_filters_list');
-  if ( regex === '' || regex === null ) {
+  //var regex = document.getElementById('img_fn_list_regex').value;
+  var p = document.getElementById('gallery');
     if ( p.selectedIndex === 0 ) {
+      console.log("HERE");
       // show all files
       _via_img_fn_list_html = [];
       _via_img_fn_list_img_index_list = [];
@@ -3151,11 +3151,7 @@ function update_img_fn_list() {
       // filter according to preset filters
       img_fn_list_onpresetfilter_select();
     }
-  } else {
-    img_fn_list_generate_html(regex);
-    img_fn_list.innerHTML = _via_img_fn_list_html.join('');
-    img_fn_list_scroll_to_current_file();
-  }
+  
 }
 
 function img_fn_list_onregex() {
@@ -5707,6 +5703,8 @@ function project_file_add_abs_path_with_input() {
   invoke_with_user_inputs(project_file_add_abs_path_input_done, input, config);
 }
 
+
+
 function project_file_add_abs_path_input_done(input) {
   if ( input.absolute_path.value !== '' ) {
     var abs_path  = input.absolute_path.value.trim();
@@ -5752,13 +5750,15 @@ function project_file_add_url_input_done(input) {
 
 function project_file_add_url(url) {
   if ( url !== '' ) {
+
     var size = -1; // convention: files added using url have size = -1
     var img_id   = _via_get_image_id(url, size);
-
     if ( ! _via_img_metadata.hasOwnProperty(img_id) ) {
       img_id = project_add_new_file(url);
       _via_img_src[img_id] = _via_img_metadata[img_id].filename;
       set_file_annotations_to_default_value(img_id);
+      console.log("here");
+
       return img_id;
     }
   }

@@ -7,15 +7,14 @@ h4{
     text-align: center;
 }
 
+.btn-primary{
+    padding:10%;
+}
 #view_trips_buttons{
-    
-    display: static;
     margin: 0 auto;
     text-align: center;
     color:white;
     width: 20%;
     margin: 0 auto;
-    margin-bottom: 0.5%;
-    text-decoration: none !important;
-
 }
+

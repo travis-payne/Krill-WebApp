@@ -14,9 +14,11 @@
 
 <h3>View Trips</h3>
 <br />
+
     <div id ="view_trips_buttons">
-        <a id="upload" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
-        <a id="delete_trip" ajax-url = "{% url 'delete_trip' %}"  style="color:white" class="btn btn-primary">Delete Trip </a>
+        <a style="display:block" id="trip_button" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
+        <br />
+        <a style="display:block" id="delete_trip" ajax-url = "{% url 'delete_trip' %}"  class="btn btn-primary">Delete Trip </a>
     </div>
 <br />
 

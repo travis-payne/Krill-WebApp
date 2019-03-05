@@ -336,7 +336,7 @@ function _via_init() {
   document.getElementById('leftsidebar').style.display = 'table-cell';
 
   // initialize default project
-  project_init_default_project();
+  //project_init_default_project();
 
   // initialize region canvas 2D context
   _via_init_reg_canvas_context();
@@ -982,6 +982,7 @@ function _via_get_image_id(filename, size) {
   if ( typeof(size) === 'undefined' ) {
     return filename;
   } else {
+    
     return filename + size;
   }
 }

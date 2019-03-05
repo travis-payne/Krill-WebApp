@@ -65,18 +65,6 @@ def Delete_Trip(request):
     return HttpResponseRedirect('/view_trips')
 
 
-# def Upload_Image_To_Trip(request):
-#     if request.method == 'POST':
-#         form = ImageForm(request.POST ,request.FILES)
-#         if form.is_valid():
-#             instance = form.save(commit=False)
-#             instance.user_name = request.user.username
-#             instance.user=request.user
-#             instance.save()
-#             return HttpResponseRedirect('/view_trips')
-#     else:
-#         form = ImageForm()
-#     return render(request,'upload_image_to_trip.html',{'form':form})
 
 def Upload_Image_To_Trip(request):
     trips = Trip.objects.all()
@@ -113,3 +101,11 @@ class BasicUploadView(View):
         else:
             data = {'is_valid': False}
         return JsonResponse(data)
+
+def Load_VIA(request):
+    sql = 'SELECT * FROM Krillapp_trip;'
+    trip_list = []
+    trips = Trip.objects.raw(sql)
+    for trip in trips:
+        trip_list.append(str(trip.trip_name))
+    return render(request ,'via.html', {'trips':trips})

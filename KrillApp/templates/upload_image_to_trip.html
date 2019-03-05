@@ -26,11 +26,24 @@
     data-url="{% url 'basic_upload' %}"
     data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
 -->
-
+<div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Uploading...</h4>
+        </div>
+        <div class="modal-body">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <div class="center">
 
-
+  
   
         
   <select id ="trip_list" >
@@ -59,7 +72,7 @@
 
 
 
-
+  
 
   <table id="gallery" class="table table-bordered">
     <thead>
@@ -74,36 +87,51 @@
 </div>
 
 <script type="text/javascript">
-$('#fileupload').fileupload({
+  $('#fileupload').fileupload({
+      formData: [
+            { name: "csrfmiddlewaretoken", value: "{{ csrf_token }}"},
+  
+        ],
+        sequentialUploads: true,  /* 1. SEND THE FILES ONE BY ONE */
+      start: function (e) {  /* 2. WHEN THE UPLOADING PROCESS STARTS, SHOW THE MODAL */
+        $("#modal-progress").modal("show");
+      },
+      stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
+        console.log("Stop");
 
-    formData: [
-          { name: "csrfmiddlewaretoken", value: "{{ csrf_token }}"},
-
-      ],
-      done: function (e, data) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
-    if (data.result.is_valid) {
-      DJANGO_STATIC_URL = '{{MEDIA_URL}}';
-      $("#gallery tbody").prepend(
-        "<tr><td><a href='" + DJANGO_STATIC_URL + data.result.url + "'>" + data.result.url +"</a></td></tr>"
-      )
+        $("#modal-progress").modal("hide");
+      },
+      progressall: function (e, data) {  /* 4. UPDATE THE PROGRESS BAR */
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        var strProgress = progress + "%";
+        $(".progress-bar").css({"width": strProgress});
+        $(".progress-bar").text(strProgress);
+      },
+        done: function (e, data) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
+      if (data.result.is_valid) {
+        DJANGO_STATIC_URL = '{{MEDIA_URL}}';
+        $("#gallery tbody").prepend(
+          "<tr><td><a href='" + DJANGO_STATIC_URL + data.result.url + "'>" + data.result.url +"</a></td></tr>"
+        )
+      }
     }
-  }
+    });
+  
+    $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+      // The example input, doesn't have to be part of the upload form:
+      var input = $('#trip_list').val();
+      data.formData = [
+      { name: "csrfmiddlewaretoken", value: "{{ csrf_token }}"},
+      { name: "trip_name", value: input}
+      ]
+  
+      
   });
-
-  $('#fileupload').bind('fileuploadsubmit', function (e, data) {
-    // The example input, doesn't have to be part of the upload form:
-    var input = $('#trip_list').val();
-    data.formData = [
-    { name: "csrfmiddlewaretoken", value: "{{ csrf_token }}"},
-    { name: "trip_name", value: input}
-    ]
-
-    
-});
-
-
-  </script>
+  
+  
+    </script>
 
 
 
 {% endblock %}
+
