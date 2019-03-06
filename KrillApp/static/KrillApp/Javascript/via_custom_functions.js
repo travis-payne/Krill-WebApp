@@ -26,12 +26,28 @@ function trip_change() {
 };
 
 function user_click_image(path){
+
+
     _via_img_metadata={};
     var img_id    = project_file_add_url(path);
     var img_index = _via_image_id_list.indexOf(img_id);
-    console.log("Img_id" + img_id);
     _via_show_img(img_index);
 }
 
+function delete_photo(){
+    var image_to_delete = $("#image_panel img:visible").attr("src");
+
+    var url = $("#delete_photo").attr("ajax-url");
+ 
+
+    $.ajax({type: "POST",
+    url: url,
+    data: {image_url: image_to_delete,
+            'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")},
+    success:function(result){
+        location.reload();
+    }})
+
+}
 
 

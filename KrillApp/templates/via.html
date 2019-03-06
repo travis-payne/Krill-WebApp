@@ -253,9 +253,7 @@
           </div>
           <p>
             <div class="button_panel">
-              <span class="button" onclick="sel_local_images()" title="Add new file from local disk">Add Files</span>
-              <span class="button" onclick="project_file_add_url_with_input()" title="Add new file using URL">Add URL</span>
-              <span class="button" onclick="project_file_remove_with_confirm()" title="Remove selected file (i.e. file currently being shown) from project">Remove</span>
+              <span id="delete_photo" ajax-url = "{% url 'delete_image' %}" class="button" onclick="delete_photo()" title="Remove selected file (i.e. file currently being shown) from trip">Delete Selected Photo</span>
             </div>
           </p>
         </div>
@@ -522,80 +520,15 @@
         </div> <!-- end of file not found panel -->
 
         <div id="page_start_info" class="display_area_content display_none narrow_page_content">
-          <ul>
+          <!-- <ul>
             <li>To start annotation, <span class="text_button" title="Load or Add Images" onclick="sel_local_images()">select images</span> (or, add images from <span class="text_button" title="Add images from a web URL (e.g. http://www.robots.ox.ac.uk/~vgg/software/via/images/swan.jpg)" onclick="project_file_add_url_with_input()">URL</span> or <span class="text_button" title="Add images using absolute path of file (e.g. /home/abhishek/image1.jpg)" onclick="project_file_add_abs_path_with_input()">absolute path</span>) and draw regions</li>
             <li>Use <span class="text_button" title="Toggle attributes editor panel" onclick="toggle_attributes_editor()">attribute editor</span> to define attributes (e.g. name) and <span class="text_button" title="Toggle annotations editor panel" onclick="annotation_editor_toggle_all_regions_editor()">annotation editor</span> to describe each region (e.g. cat) using these attributes.</li>
             <li>Remember to <span class="text_button" onclick="project_save_with_confirm()">save</span> your project before closing this application so that you can <span class="text_button" onclick="project_open_select_project_file()">load</span> it later to continue annotation.</li>
             <li>For help, see the <span class="text_button" onclick="set_display_area_content(VIA_DISPLAY_AREA_CONTENT_NAME.PAGE_GETTING_STARTED)">Getting Started</span> page and pre-loaded demo: <a href="http://www.robots.ox.ac.uk/~vgg/software/via/via_demo.html">image annotation</a> and <a href="http://www.robots.ox.ac.uk/~vgg/software/via/via_face_demo.html">face annotation</a>.</li>
-          </ul>
+          </ul> -->
 
         </div>
 
-        <div id="page_getting_started" class="display_area_content display_none narrow_page_content">
-          <p>A more detailed user guide (with screenshots and descriptions) is <a href="http://www.robots.ox.ac.uk/~vgg/software/via/docs/user_guide.html">available here</a>.</p>
-          <ol>
-            <li><strong>Load Images</strong>: The first step is to load all the images that you wish to annotate. There are multiple ways to add images to a VIA project. Choose the method that suits your use case.
-              <ul>
-                <li>Method 1: Selecting local files using browser's file selector
-                  <ol>
-                    <li>Click <span class="text_button" title="Load or Add Images" onclick="sel_local_images()"><code>Project &rarr; Add local files</code></span></li>
-                    <li>Select desired images and click <code>Open</code></li>
-                  </ol>
-                </li>
-                <li>Method 2: Adding files from URL or absolute path
-                  <ol>
-                    <li>Click <span class="text_button" title="Add images from a web URL (e.g. http://www.robots.ox.ac.uk/~vgg/software/via/images/swan.jpg)" onclick="project_file_add_url_with_input()"><code>Project &rarr; Add files from URL</code></span></li>
-                    <li>Enter URL and click <code>OK</code></li>
-                  </ol>
-                </li>
-                <li>Method 3: Adding files from list of url or absolute path stored in text file
-                  <ol>
-                    <li>Create a text file containing URL and absolute path (one per line)</li>
-                    <li>Click <span class="text_button" title="Add images from a list of web url or absolute path stored in a text file (one url or path per line)" onclick="sel_local_data_file('files_url')"><code>Project &rarr; Add url or path from text file</code></span></li>
-                    <li>Select the text file and click <code>Open</code></li>
-                  </ol>
-                </li>
-              </ul>
-            </li>
-            <li><strong>Draw Regions</strong>: Select a region shape (<span class="text_button" onclick="select_region_shape('rect')">rectangle</span>, <span class="text_button" onclick="select_region_shape('circle')">circle</span>, <span class="text_button" onclick="select_region_shape('ellipse')">ellipse</span>, <span class="text_button" onclick="select_region_shape('polygon')">polygon</span>, <span class="text_button" onclick="select_region_shape('point')">point</span>, <span class="text_button" onclick="select_region_shape('polyline')">polyline</span>) from the left sidebar and draw regions as follows:
-
-              <ul>
-                <li>Rectangle, Circle and Ellipse
-                  <ul>
-                    <li>Press left mouse button, drag mouse cursor and release mouse button.</li>
-                    <li>To define a point inside an existing region, click inside the region to select it (if not already selected), now press left mouse button, drag and release to draw region inside existing region.</li>
-                    <li>To select, click inside the region. If the click point contains multiple regions, then clicking multiple times at that location shuffles selection through those regions.</li>
-                  </ul>
-                </li>
-              </ul>
-
-              <ul>
-                <li>Point
-                  <ul>
-                    <li>Click to define points.</li>
-                    <li>To draw a region inside existing region, click inside the region to select it (if not already selected), now click again to define the point.</li>
-                    <li>To select, click on (or near) the existing point.</li>
-                  </ul>
-                </li>
-              </ul>
-
-              <ul>
-                <li>Polygon and Polyline
-                  <ul>
-                    <li>Click to define vertices.</li>
-                    <li>Press <strong>[Enter]</strong> to finish drawing the region or press [Esc] to cancel.</li>
-                    <li>If the first vertex needs to be defined inside an existing region, click inside the region to select it (if not already selected), now click again to define the vertex.</li>
-                    <li>To select, click inside the region. If the click point contains multiple regions, then clicking multiple times at that location shuffles selection through those regions.</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-
-            <li><strong>Create Annotations</strong>: For a more detailed description of this step, see <a href="http://www.robots.ox.ac.uk/~vgg/software/via/docs/creating_annotations.html">Creating Annotations : VIA User Guide</a>. Click the <span class="text_button" onclick="annotation_editor_toggle_all_regions_editor()"><code>View &rarr; Toggle attributes editor</code></span> to show attributes editor panel in left sidebar and add the desired file or region attributes (e.g. name). Now click <span class="text_button" onclick="annotation_editor_toggle_all_regions_editor()"><code>View &rarr; Toggle annotations editor</code></span> to show the annotation editor panel in the bottom side. Update the annotations for each region.</li>
-            <li><strong>Export Annotations</strong>: To export the annotations in json or csv format, click <span class="text_button" onclick="download_all_region_data('csv')"><code>Annotation &rarr; Export annotations</code></span> in top menubar.</li>
-            <li><strong>Save Project</strong>: To save the project, click <span class="text_button" onclick="project_save_with_confirm()"><code>Project &rarr; Save</code></span> in top menubar.</li>
-          </ol>
-        </div>
 
         <div id="page_load_ongoing" class="display_area_content narrow_page_content">
           <div style="text-align:center">

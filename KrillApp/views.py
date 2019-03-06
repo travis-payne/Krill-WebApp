@@ -78,6 +78,12 @@ def Delete_User_Image(request):
     Image.objects.filter(image_file=request.POST['image_url']).delete()
     return HttpResponseRedirect('/view_trips')
 
+def Delete_User_Image(request):
+    print(request.POST['image_url'])
+    print(Image.objects.filter(image_file=request.POST['image_url']).delete())
+    return HttpResponse('/via')
+    
+
 
 def View_Trip_Image(request):
     html = render_to_string('view_trip_image.html',{'image_url':request.POST['image_url'],'raw_url':request.POST['stripped_url']},request=request)
