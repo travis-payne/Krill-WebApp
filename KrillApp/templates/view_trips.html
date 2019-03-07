@@ -5,7 +5,6 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script src="{% static 'KrillApp/Javascript/view_trips.js' %}" type="text/javascript"></script>
 <script> var csrftoken = '{{ csrf_token }}'; </script>
 
@@ -17,7 +16,6 @@
 
     <div id ="view_trips_buttons">
         <a style="display:block" id="trip_button" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
-        <br />
         <a style="display:block" id="delete_trip" ajax-url = "{% url 'delete_trip' %}"  class="btn btn-primary">Delete Trip </a>
     </div>
 <br />
@@ -41,20 +39,8 @@
     </ul>
 
         
-<script>
 
 
-    </script>
 
-
-<script>
-    $(function(){
-    $("#delete_image").on("click",(function () {
-
-
-    }));
-
-});
-</script>
 
 {% endblock %}

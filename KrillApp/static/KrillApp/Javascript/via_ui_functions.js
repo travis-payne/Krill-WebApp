@@ -157,7 +157,7 @@ function _via_load_canvas_regions() {
 function select_region_shape(sel_shape_name) {
   for ( var shape_name in VIA_REGION_SHAPE ) {
     var ui_element = document.getElementById('region_shape_' + VIA_REGION_SHAPE[shape_name]);
-    ui_element.classList.remove('selected');
+    //ui_element.classList.remove('selected');
   }
 
   _via_current_shape = sel_shape_name;
@@ -3108,7 +3108,7 @@ function init_leftsidebar_accordion() {
         update_attributes_update_panel();
         break;
       case 'Project':
-        update_img_fn_list();
+        //update_img_fn_list();
         break;
       }
     });
@@ -5757,7 +5757,6 @@ function project_file_add_url(url) {
       img_id = project_add_new_file(url);
       _via_img_src[img_id] = _via_img_metadata[img_id].filename;
       set_file_annotations_to_default_value(img_id);
-      console.log("here");
 
       return img_id;
     }

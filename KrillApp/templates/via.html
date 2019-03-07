@@ -63,7 +63,7 @@
                   <a class="nav-link" href="{% url 'view_trips' %}">View Trips</a>
               </li>
               <li class="nav-item active">
-                  <a class="nav-link" href="{% url 'via' %}">here we go</a>
+                  <a class="nav-link" href="{% url 'via' %}">Annotate Images</a>
               </li>
               <li class="nav-item active">
                   <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -209,11 +209,6 @@
         <div class="leftsidebar_accordion_panel show">
           <ul class="region_shape">
             <li id="region_shape_rect" class="selected" onclick="select_region_shape('rect')" title="Rectangle (Shortcut key 1)"><svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_rectangle"></use></svg></li>
-            <li id="region_shape_circle" onclick="select_region_shape('circle')" title="Circle (Shortcut key 2)"><svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_circle"></use></svg></li>
-            <li id="region_shape_ellipse" onclick="select_region_shape('ellipse')" title="Ellipse (Shortcut key 3)"><svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_ellipse"></use></svg></li>
-            <li id="region_shape_polygon" onclick="select_region_shape('polygon')" title="Polygon (Shortcut key 4)"><svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_polygon"></use></svg></li>
-            <li id="region_shape_point" onclick="select_region_shape('point')" title="Point (Shortcut key 5)"><svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_point"></use></svg></li>
-            <li id="region_shape_polyline" onclick="select_region_shape('polyline')" title="Polyline (Shortcut key 6)"><svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_polyline"></use></svg></li>
           </ul>
         </div>
 
@@ -253,7 +248,7 @@
           </div>
           <p>
             <div class="button_panel">
-              <span id="delete_photo" ajax-url = "{% url 'delete_image' %}" class="button" onclick="delete_photo()" title="Remove selected file (i.e. file currently being shown) from trip">Delete Selected Photo</span>
+              <span id="delete_photo" media-url = "{{ MEDIA_URL}}" ajax-url = "{% url 'delete_image' %}" class="button" onclick="delete_photo()" title="Remove selected file (i.e. file currently being shown) from trip">Delete Selected Photo</span>
             </div>
           </p>
         </div>
@@ -379,7 +374,9 @@
 
       <!-- Main display area: contains image canvas, ... -->
       <div id="display_area">
+          <h2 id="current_image"></h2>
         <div id="image_panel" class="display_area_content display_none">
+
           <!-- buffer images using <img> element will be added here -->
 
           <!-- @todo: in future versions, this canvas will be replaced by a <svg> element -->
@@ -581,9 +578,29 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript">
         $("#gallery").on("click", "td", function() {
+          clearRows()
           DJANGO_STATIC_URL = '{{MEDIA_URL}}';
-          user_click_image(DJANGO_STATIC_URL + $( this ).text())
+          user_click_image(DJANGO_STATIC_URL + $( this ).text());
+          document.getElementById("current_image").innerHTML =  $( this ).text();
+          $( this ).css("background-color","gray");
+
         });
+
+        function clearRows() {
+    $('#gallery tbody td').each(function() {
+        $(this).css('backgroundColor', '');
+    });
+}
+  </script>
+  <script type="text/javascript">
+  document.addEventListener('keydown', function(event) {
+      const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+      if(key =="Delete"){
+        clearRows();
+        delete_photo();
+      }
+  });
+
   </script>
 
 

@@ -5,10 +5,13 @@
 {% block title %}create_trip{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'KrillApp/create_trip.css' %}">
 
-<h3>Create Trip</h3>
+
 
 <div class="center">
+    <h3>Create Trip</h3>
+
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {{ form|crispy}}

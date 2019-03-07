@@ -427,7 +427,8 @@ function download_as_image() {
     var a      = document.createElement('a');
     a.href     = saved_img;
     a.target   = '_blank';
-    a.download = _via_current_image_filename;
+    a.download = _via_current_image_filename.slice(0,-1);
+    console.log("YEET");
 
     // simulate a mouse click event
     var event = new MouseEvent('click', {

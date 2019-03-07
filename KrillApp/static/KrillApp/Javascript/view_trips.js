@@ -1,8 +1,14 @@
 
 $(function () {
     $("ul[id*=trip_list] li").click(function () {
+        $("#trip_list").find("li").each(function() { 
+            $( this ).css("backgroundColor",'');
+         });
         DJANGO_STATIC_URL = '{{MEDIA_URL}}';
         var trip_name = $(this).text(); // gets text contents of clicked li
+        $( this ).css("backgroundColor","lightgray");
+
+
         document.getElementById("Trip_Name").innerHTML = trip_name;
         var url = $("#trip_list").attr("ajax-url");
         $.ajax({
@@ -34,7 +40,6 @@ $(function () {
                     list.appendChild(item);
                 }
 
-                document.getElementById("Trip_Name").scrollIntoView(true);
             }
         })
 
@@ -44,10 +49,9 @@ $(function () {
 
 $(function () {
 
-    $("ul[id*=trip_image_list] li").live('click', function () {
+    $("#trip_image_list").on('click','li', function () {
         DJANGO_STATIC_URL = $("ul[id*=trip_image_list]").attr("media-url");
         var image_url = $(this).text(); // gets text contents of clicked li
-        console.log(image_url);
         var url = $("ul[id*=trip_image_list]").attr("ajax-url"); // gets text contents of clicked li
         $.ajax({
             type: "POST",
@@ -73,26 +77,43 @@ $(function () {
 
 $(function () {
     $("#delete_trip").click(function () {
-        if (confirm('Are you sure you want to delete the trip ' + $("#Trip_Name").text() + ' and it\'s images?')) {
-            var trip_name = document.getElementById("Trip_Name").innerHTML;
-                var url = $("#delete_trip").attr("ajax-url");
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: {
-                        trip_to_delete: trip_name,
-                        'csrfmiddlewaretoken': csrftoken
-                    },
-                    success: function (result) {
-                        location.reload();
-                        console.log("test");
-                        
+        $.confirm({
+            title: 'Confirm Trip Deletion',
+            content: 'Are you sure you want to delete the trip "' + $("#Trip_Name").text() + '" and it\'s images?',
+            buttons: {
+                confirm: function () {
+                    var trip_name = document.getElementById("Trip_Name").innerHTML;
+                    var url = $("#delete_trip").attr("ajax-url");
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: {
+                            trip_to_delete: trip_name,
+                            'csrfmiddlewaretoken': csrftoken
+                        },
+                        success: function (result) {
+                            $.alert({
+                                title: 'Success!',
+                                content: 'Trip Deleted!',
+                                buttons:{
+                                    ok: function () {
+                                        location.reload();
+                                    }
+                                }
+                            });
+                            
 
-                    }
-                })
-            } else {
-                    // Do nothing!
-                }
+                            
+    
+                        }
+                    })
+                },
+                cancel: function () {
+                    $.alert('Canceled!');
+                },
+            }
+        });
+
 
     });
 
