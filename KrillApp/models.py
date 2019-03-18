@@ -25,4 +25,5 @@ class Image(models.Model):
     user_name = models.CharField(max_length=30, default = "")
     time_uploaded = models.DateTimeField(default=datetime.now)
     trip_name = models.ForeignKey(Trip, to_field='trip_name',on_delete = models.CASCADE)
+    image_annotations = models.TextField(default="")
 

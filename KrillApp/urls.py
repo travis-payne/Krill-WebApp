@@ -37,7 +37,8 @@ urlpatterns = [
     path("view_trip_image/",views.View_Trip_Image,name='view_trip_image'),
     path("delete_trip/",views.Delete_Trip,name='delete_trip'),
     path("via/",views.Load_VIA,name='via'),
-    path("basic-upload/",views.BasicUploadView.as_view(),name='basic_upload')
+    path("basic-upload/",views.BasicUploadView.as_view(),name='basic_upload'),
+    path("save_annotations/",views.Save_Image_Annotations,name='save_annotations')
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static("/Javascript/", document_root=settings.STATIC_ROOT)

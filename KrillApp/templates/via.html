@@ -249,6 +249,8 @@
           <p>
             <div class="button_panel">
               <span id="delete_photo" media-url = "{{ MEDIA_URL}}" ajax-url = "{% url 'delete_image' %}" class="button" onclick="delete_photo()" title="Remove selected file (i.e. file currently being shown) from trip">Delete Selected Photo</span>
+              <span id="save_annotations" media-url = "{{ MEDIA_URL}}" ajax-url = "{% url 'save_annotations' %}" class="button" onclick="save_annotations_to_DB()" title="">Save Annotations</span>
+
             </div>
           </p>
         </div>

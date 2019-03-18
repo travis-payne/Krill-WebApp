@@ -315,6 +315,7 @@ function file_metadata(filename, size) {
   this.file_attributes = {};    // image attributes
 }
 
+// Annotation Object
 function file_region() {
   this.shape_attributes  = {}; // region shape attributes
   this.region_attributes = {}; // region attributes
@@ -673,14 +674,19 @@ function import_annotations_from_csv(data) {
         }
       }
 
+      // THIS IS WHERE REGIONS ARE PULLED FROM CSV FILE
       var region_i = new file_region();
       // copy regions shape attributes
       if ( d[parsed_header.region_shape_attr_index] !== '"{}"' ) {
         var sattr = d[parsed_header.region_shape_attr_index];
         sattr     = remove_prefix_suffix_quotes( sattr );
         sattr     = unescape_from_csv( sattr );
+        console.log(sattr);
+
+        
 
         var m = json_str_to_map( sattr );
+        // Maps key (height, width, name) to value
         for ( var key in m ) {
           region_i.shape_attributes[key] = m[key];
         }
@@ -706,6 +712,7 @@ function import_annotations_from_csv(data) {
       // add regions only if they are present
       if (Object.keys(region_i.shape_attributes).length > 0 ||
           Object.keys(region_i.region_attributes).length > 0 ) {
+            //console.log(region_i.shape_attributes);
         _via_img_metadata[img_id].regions.push(region_i);
         region_import_count += 1;
       }
@@ -1072,9 +1079,11 @@ function pack_via_metadata(return_type) {
           csvline.push(r.length);
           csvline.push(i);
 
+          // Shape attributes are HERE.
           var sattr = map_to_json( r[i].shape_attributes );
           sattr = '"' +  escape_for_csv( sattr ) + '"';
           csvline.push(sattr);
+          console.log(sattr);
 
           var rattr = map_to_json( r[i].region_attributes );
           rattr = '"' +  escape_for_csv( rattr ) + '"';

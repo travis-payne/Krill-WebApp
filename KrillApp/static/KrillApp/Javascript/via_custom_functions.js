@@ -25,6 +25,47 @@ function trip_change() {
 
 };
 
+function save_annotations_to_DB(){
+    var csvline = [];
+
+    for ( var image_id in _via_img_metadata ) {
+
+        var r = _via_img_metadata[image_id].regions;
+  
+        if ( r.length !==0 ) {
+          for ( var i = 0; i < r.length; ++i ) {
+  
+            // Shape attributes are HERE.
+            var sattr = map_to_json( r[i].shape_attributes );
+            csvline.push(sattr);
+  
+          }
+        }
+      }
+      csvline = csvline.toString();
+      var url = $("#save_annotations").attr("ajax-url"); // gets text contents of clicked li
+      var image = $("#image_panel img").attr("src");
+
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            image_name: image,
+            image_annotations: csvline,
+            'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
+        },
+        success: function (result) {
+            
+           
+        }
+    })
+}
+
+function load_annotations_from_DB(){
+
+
+}
+
 function user_click_image(path){
     _via_img_metadata={};
     var img_id    = project_file_add_url(path);
