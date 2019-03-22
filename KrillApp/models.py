@@ -21,9 +21,15 @@ class Trip(models.Model):
         return '%s' % (self.trip_name)
 
 class Image(models.Model):
-    image_file = models.ImageField(upload_to=user_directory_path) 
+    image = models.ImageField(unique = True,upload_to=user_directory_path) 
+    file_name = models.TextField(primary_key=True)
     user_name = models.CharField(max_length=30, default = "")
-    time_uploaded = models.DateTimeField(default=datetime.now)
     trip_name = models.ForeignKey(Trip, to_field='trip_name',on_delete = models.CASCADE)
     image_annotations = models.TextField(default="")
+
+class Krill(models.Model):
+    image_file = models.ForeignKey(Image,on_delete= models.CASCADE,blank=True, null=True)
+    length = models.DecimalField(blank=True,null=True,max_digits=10 ,decimal_places=5)
+    maturity = models.CharField(blank=True, null=True,max_length=30,default="")
+    image_annotation = models.TextField(default="")
 

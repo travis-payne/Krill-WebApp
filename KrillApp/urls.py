@@ -39,7 +39,8 @@ urlpatterns = [
     path("via/",views.Load_VIA,name='via'),
     path("basic-upload/",views.BasicUploadView.as_view(),name='basic_upload'),
     path("save_image_annotations/",views.Save_Image_Annotations,name='save_image_annotations'),
-    path("load_image_annotations/",views.Load_Image_Annotations,name='load_image_annotations')
+    path("load_image_annotations/",views.Load_Image_Annotations,name='load_image_annotations'),
+    path("save_image_annotations_2/",views.Save_Image_Annotations_2,name='save_image_annotations_2')
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static("/Javascript/", document_root=settings.STATIC_ROOT)

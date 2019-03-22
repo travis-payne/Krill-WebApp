@@ -7,7 +7,7 @@ from KrillApp.models import Trip
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
-        fields = ('image_file','trip_name')
+        fields = ('image','trip_name')
         widgets = {
             'user': TextInput(attrs={'readonly': 'readonly'})
         }

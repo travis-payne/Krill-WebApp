@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from KrillApp.forms import ImageForm ,TripForm
-from KrillApp.models import Image, Trip
+from KrillApp.models import Image, Trip, Krill
 from django.views import View
 
 
@@ -55,7 +55,7 @@ def Get_Trip_Image_List(request):
     trip_image_list = []
     images = Image.objects.raw(sql)
     for image in images:
-        trip_image_list.append(str(image.image_file))
+        trip_image_list.append(str(image.image))
     return JsonResponse({
         'trip_image_list':trip_image_list,
     })
@@ -77,7 +77,7 @@ def Upload_Image_To_Trip(request):
 
 def Delete_User_Image(request):
     print(request.POST['image_url'])
-    print(Image.objects.filter(image_file=request.POST['image_url']).delete())
+    print(Image.objects.filter(image=request.POST['image_url']).delete())
     return HttpResponse('/via')
     
 
@@ -93,14 +93,15 @@ class BasicUploadView(View):
 
     def post(self, request):
         form = ImageForm(self.request.POST, self.request.FILES)
+        print(form.errors)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.trip_name = Trip.objects.get(trip_name__exact=request.POST['trip_name'])
             instance.user_name = request.user.username
             instance.user=request.user
+            instance.file_name= str(instance.image)
             instance.save()
-            print(instance.image_file)
-            data = {'is_valid': True, 'url': str(instance.image_file)}
+            data = {'is_valid': True, 'url': instance.file_name}
         else:
             data = {'is_valid': False}
         return JsonResponse(data)
@@ -115,13 +116,17 @@ def Load_VIA(request):
 
 
 def Save_Image_Annotations(request):
-    Image.objects.filter(image_file= request.POST['image_name']).update(image_annotations =  request.POST['image_annotations'])
+    Image.objects.filter(image= request.POST['image_name']).update(image_annotations =  request.POST['image_annotations'])
     return HttpResponse('/via')
 
 def Load_Image_Annotations(request):
-    Images = Image.objects.filter(image_file=request.POST['image_file'])
+    Images = Image.objects.filter(image=request.POST['image_file'])
     firstImage = Images.first()
-    print(firstImage)
     return JsonResponse({
         'annotations':firstImage.image_annotations,
     })
+
+def Save_Image_Annotations_2(request):
+    image = Image.objects.get(image= str(request.POST['image_file']))
+    k = Krill.objects.create(image_file=image,image_annotation = request.POST['image_annotations'])
+    return HttpResponse('/via')

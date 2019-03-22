@@ -27,6 +27,7 @@ function trip_change() {
 
 function save_annotations_to_DB(){
     var csvline = [];
+    var csvArray= [];
 
     for ( var image_id in _via_img_metadata ) {
         var r = _via_img_metadata[image_id].regions;
@@ -41,8 +42,7 @@ function save_annotations_to_DB(){
         }
       }
       if(csvline.length != 0){
-        console.log(csvline);
-
+          csvArray = csvline;
       csvline = JSON.stringify(csvline);
       }
       else{
@@ -67,6 +67,31 @@ function save_annotations_to_DB(){
            
         }
     })
+
+    var url = $("#save_annotations").attr("ajax-url-2"); // gets text contents of clicked li
+
+    for(var i = 0; i < csvArray.length; i++){
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                image_file: image,
+                image_annotations: JSON.stringify(csvArray[i]),
+                'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
+            },
+            success: function (result) {
+                
+               
+            }
+        })
+
+    }
+   
+
+
+
+
 }
 
 function toggleClicked(){

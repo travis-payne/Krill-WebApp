@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'KrillApp',
     'crispy_forms',
     'django_cleanup',
+    'debug_toolbar',
     
 ]
 
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+
 ]
 
 ROOT_URLCONF = 'Krill.urls'
