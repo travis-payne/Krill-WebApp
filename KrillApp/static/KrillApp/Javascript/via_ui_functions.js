@@ -1468,7 +1468,6 @@ function draw_all_region_id() {
   _via_reg_ctx.shadowColor = "transparent";
   _via_reg_ctx.font = _via_settings.ui.image.region_label_font;
   for ( var i = 0; i < _via_img_metadata[_via_image_id].regions.length; ++i ) {
-    console.log(i);
     var canvas_reg = _via_canvas_regions[i];
 
     var bbox = get_region_bounding_box(canvas_reg);
@@ -1651,6 +1650,7 @@ function is_inside_region(px, py, descending_order) {
 }
 
 function is_inside_this_region(px, py, region_id) {
+  if (_via_canvas_regions.length > 0){
   var attr   = _via_canvas_regions[region_id].shape_attributes;
   var result = false;
   switch ( attr['name'] ) {
@@ -1690,6 +1690,7 @@ function is_inside_this_region(px, py, region_id) {
                              px, py);
     break;
   }
+}
   return result;
 }
 

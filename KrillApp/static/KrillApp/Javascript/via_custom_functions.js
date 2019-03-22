@@ -40,14 +40,20 @@ function save_annotations_to_DB(){
           }
         }
       }
-      csvline = JSON.stringify(csvline);
-      var url = $("#save_annotations").attr("ajax-url"); // gets text contents of clicked li
-      var image = $("#image_panel img").attr("src");
+      if(csvline.length != 0){
+        console.log(csvline);
 
+      csvline = JSON.stringify(csvline);
+      }
+      else{
+          csvline = "";
+      }
+      var url = $("#save_annotations").attr("ajax-url"); // gets text contents of clicked li
+      var image = document.getElementById("current_image").innerHTML;
       image = image.replace($("#delete_photo").attr("media-url"),"");
       // Removes whitespace
       image = image.trim();
-
+      console.log(image);
       $.ajax({
         type: "POST",
         url: url,
@@ -77,9 +83,8 @@ function toggleClicked(){
 
 
         var annotations = result['annotations'];        
-
+        if(annotations!=""){
         var m = json_str_to_map( annotations );
-
         // Maps key (height, width, name) to value
         for ( var i = 0; i < m.length; i++ ) {
             var region_i = new file_region();
@@ -99,7 +104,10 @@ function toggleClicked(){
         
         
 
-    }})
+    }
+}
+
+})
 
 }
 
