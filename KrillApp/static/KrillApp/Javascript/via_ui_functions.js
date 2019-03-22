@@ -88,27 +88,30 @@ function show_message(msg, t) {
 // transform regions in image space to canvas space
 function _via_load_canvas_regions() {
   // load all existing annotations into _via_canvas_regions
-  var regions = _via_img_metadata[_via_image_id].regions;
+  var regions;
+  for ( var image_id in _via_img_metadata ) {
+     regions = _via_img_metadata[image_id].regions;
+  }
   _via_canvas_regions  = [];
-  for ( var i = 0; i < regions.length; ++i ) {
-    var region_i = new file_region();
-    for ( var key in regions[i].shape_attributes ) {
-      region_i.shape_attributes[key] = regions[i].shape_attributes[key];
-    }
-    _via_canvas_regions.push(region_i);
-
+   for ( var i = 0; i < regions.length; ++i ) {
+     var region_i = new file_region();
+     for ( var key in regions[i].shape_attributes ) {
+       region_i.shape_attributes[key] = regions[i].shape_attributes[key];
+     }
+     _via_canvas_regions.push(region_i);
     switch(_via_canvas_regions[i].shape_attributes['name']) {
     case VIA_REGION_SHAPE.RECT:
-      var x      = regions[i].shape_attributes['x'] / _via_canvas_scale;
-      var y      = regions[i].shape_attributes['y'] / _via_canvas_scale;
-      var width  = regions[i].shape_attributes['width']  / _via_canvas_scale;
-      var height = regions[i].shape_attributes['height'] / _via_canvas_scale;
+    var x      = regions[i].shape_attributes['x'] / _via_canvas_scale;
+    var y      = regions[i].shape_attributes['y'] / _via_canvas_scale;
+    var width  = regions[i].shape_attributes['width']  / _via_canvas_scale;
+    var height = regions[i].shape_attributes['height'] / _via_canvas_scale;
 
-      _via_canvas_regions[i].shape_attributes['x'] = Math.round(x);
-      _via_canvas_regions[i].shape_attributes['y'] = Math.round(y);
-      _via_canvas_regions[i].shape_attributes['width'] = Math.round(width);
-      _via_canvas_regions[i].shape_attributes['height'] = Math.round(height);
-      break;
+    _via_canvas_regions[i].shape_attributes['x'] = Math.round(x);
+    _via_canvas_regions[i].shape_attributes['y'] = Math.round(y);
+    _via_canvas_regions[i].shape_attributes['width'] = Math.round(width);
+    _via_canvas_regions[i].shape_attributes['height'] = Math.round(height);
+    break;
+
 
     case VIA_REGION_SHAPE.CIRCLE:
       var cx = regions[i].shape_attributes['cx'] / _via_canvas_scale;
@@ -1465,6 +1468,7 @@ function draw_all_region_id() {
   _via_reg_ctx.shadowColor = "transparent";
   _via_reg_ctx.font = _via_settings.ui.image.region_label_font;
   for ( var i = 0; i < _via_img_metadata[_via_image_id].regions.length; ++i ) {
+    console.log(i);
     var canvas_reg = _via_canvas_regions[i];
 
     var bbox = get_region_bounding_box(canvas_reg);

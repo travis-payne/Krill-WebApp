@@ -73,10 +73,7 @@ def Upload_Image_To_Trip(request):
 
 
 #todo fix lmao
-def Delete_User_Image(request):
-    print(request.POST['image_url'])
-    Image.objects.filter(image_file=request.POST['image_url']).delete()
-    return HttpResponseRedirect('/view_trips')
+
 
 def Delete_User_Image(request):
     print(request.POST['image_url'])
@@ -118,8 +115,13 @@ def Load_VIA(request):
 
 
 def Save_Image_Annotations(request):
-    print(request.POST)
-    sql = 'UPDATE Krillapp_image SET image_annotations = ' + request.POST['image_annotations'] + ' WHERE image_file = '+request.POST['image_name']+';'
-    responce = Image.objects.raw(sql)
-    print(responce)
+    Image.objects.filter(image_file= request.POST['image_name']).update(image_annotations =  request.POST['image_annotations'])
     return HttpResponse('/via')
+
+def Load_Image_Annotations(request):
+    Images = Image.objects.filter(image_file=request.POST['image_file'])
+    firstImage = Images.first()
+    print(firstImage)
+    return JsonResponse({
+        'annotations':firstImage.image_annotations,
+    })

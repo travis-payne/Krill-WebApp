@@ -162,7 +162,7 @@ body { min-width:200px; padding:0; margin:0; font-family:sans-serif; }
       ul.region_shape .selected { fill:#ffffff; stroke:#ff0000; }
 
       /* Loaded image list shown in leftsidebar panel */
-      #img_fn_list    { display:none; font-size:small; overflow:scroll; min-height:10rem; max-height:25rem; }
+      #img_fn_list    { display:none; font-size:small; overflow:scroll; min-height:10rem; max-height:50rem; }
       #img_fn_list ul { position:relative; line-height:1.3em; margin:0; padding:0; list-style-type:none;}
       #img_fn_list li { white-space:nowrap; display:block; padding:0 0.4rem; }
       #img_fn_list li:hover   { background-color:#d5e5ff; cursor:pointer; }

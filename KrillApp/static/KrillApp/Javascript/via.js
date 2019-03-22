@@ -681,11 +681,12 @@ function import_annotations_from_csv(data) {
         var sattr = d[parsed_header.region_shape_attr_index];
         sattr     = remove_prefix_suffix_quotes( sattr );
         sattr     = unescape_from_csv( sattr );
-        console.log(sattr);
+        
 
         
 
         var m = json_str_to_map( sattr );
+        console.log(typeof sattr);
         // Maps key (height, width, name) to value
         for ( var key in m ) {
           region_i.shape_attributes[key] = m[key];
