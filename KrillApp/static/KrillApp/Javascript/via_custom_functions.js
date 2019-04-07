@@ -48,36 +48,21 @@ function save_annotations_to_DB(){
       else{
           csvline = "";
       }
-      var url = $("#save_annotations").attr("ajax-url"); // gets text contents of clicked li
       var image = document.getElementById("current_image").innerHTML;
       image = image.replace($("#delete_photo").attr("media-url"),"");
       // Removes whitespace
       image = image.trim();
-      console.log(image);
-      $.ajax({
-        type: "POST",
-        url: url,
-        data: {
-            image_name: image,
-            image_annotations: csvline,
-            'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
-        },
-        success: function (result) {
-            
-           
-        }
-    })
 
-    var url = $("#save_annotations").attr("ajax-url-2"); // gets text contents of clicked li
 
-    for(var i = 0; i < csvArray.length; i++){
+    var url = $("#save_annotations").attr("ajax-url"); // gets text contents of clicked li
+
 
         $.ajax({
             type: "POST",
             url: url,
             data: {
                 image_file: image,
-                image_annotations: JSON.stringify(csvArray[i]),
+                image_annotations: JSON.stringify(csvArray),
                 'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
             },
             success: function (result) {
@@ -86,10 +71,49 @@ function save_annotations_to_DB(){
             }
         })
 
-    }
+    
    
 
 
+
+
+}
+
+function detect_krill(){
+    var image_file = document.getElementById("current_image").innerHTML;
+    image_file = image_file.trim();
+
+    var url = $("#detect_krill").attr("ajax-url");
+
+    $.ajax({type: "POST",
+    url: url,
+    data: {image_file: image_file,
+            'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")},
+    success:function(result){
+
+        var annotations = result['annotations'];                
+        // Maps key (height, width, name) to value
+        for ( var i = 0; i < annotations.length; i++ ) {
+            var region_i = new file_region();
+            var line = annotations[i];
+            region_i.shape_attributes = line;
+            for ( var image_id in _via_img_metadata ) {
+            _via_img_metadata[image_id].regions.push(region_i);
+            }
+
+        }
+        // Display annotations on image
+        update_attributes_update_panel();
+        annotation_editor_update_content();
+        _via_load_canvas_regions(); // image to canvas space transform
+        _via_redraw_reg_canvas();
+        _via_reg_canvas.focus();
+        
+        
+
+}
+
+})
 
 
 }
@@ -105,7 +129,7 @@ function toggleClicked(){
     data: {image_file: image_file,
             'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")},
     success:function(result){
-
+   
 
         var annotations = result['annotations'];        
         if(annotations!=""){
@@ -114,7 +138,9 @@ function toggleClicked(){
         for ( var i = 0; i < m.length; i++ ) {
             var region_i = new file_region();
             var line = JSON.parse(m[i]);
+
             region_i.shape_attributes = line;
+            console.log(region_i.shape_attributes);
             for ( var image_id in _via_img_metadata ) {
             _via_img_metadata[image_id].regions.push(region_i);
             }

@@ -286,8 +286,10 @@
             <span id="delete_photo" media-url="{{ MEDIA_URL}}" ajax-url="{% url 'delete_image' %}" class="button"
               onclick="delete_photo()" title="Remove selected file (i.e. file currently being shown) from trip">Delete
               Selected Photo</span>
-            <span id="save_annotations" ajax-url-2= "{% url 'save_image_annotations_2' %}" media-url="{{ MEDIA_URL}}" ajax-url="{% url 'save_image_annotations' %}"
+            <span id="save_annotations" ajax-url= "{% url 'save_image_annotations' %}" media-url="{{ MEDIA_URL}}"
               class="button" onclick="save_annotations_to_DB()" title="">Save Annotations</span>
+              <span id="detect_krill" ajax-url-2= "{% url 'detect_krill' %}" media-url="{{ MEDIA_URL}}" ajax-url="{% url 'detect_krill' %}"
+              class="button" onclick="detect_krill()" title="">Detect Krill</span>
           </div>
         </p>
       </div>

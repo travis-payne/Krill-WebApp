@@ -1,0 +1,23 @@
+h3{
+    margin: 0 auto;
+    text-align: center;
+}
+h4{
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+#view_trips_buttons{
+    margin: 0 auto;
+    text-align: center;
+    color:white;
+    width: 20%;
+    margin: 0 auto;
+}
+
+.btn-primary {
+    margin: 2% 0;
+    cursor: pointer;
+
+}

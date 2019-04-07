@@ -100,7 +100,6 @@
         console.log("Stop");
 
         $("#modal-progress").modal("hide");
-
       },
       progressall: function (e, data) {  /* 4. UPDATE THE PROGRESS BAR */
         var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -110,9 +109,9 @@
       },
         done: function (e, data) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
       if (data.result.is_valid) {
-        DJANGO_STATIC_URL = '{{MEDIA_URL}}';
+        DJANGO_MEDIA_URL = '{{MEDIA_URL}}';
         $("#gallery tbody").prepend(
-          "<tr><td><a href='" + DJANGO_STATIC_URL + data.result.url + "'>" + data.result.url +"</a></td></tr>"
+          "<tr><td><a href='" + DJANGO_MEDIA_URL + data.result.url + "'>" + data.result.url +"</a></td></tr>"
         )
       }
     }

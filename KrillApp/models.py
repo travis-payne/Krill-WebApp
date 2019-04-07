@@ -27,6 +27,7 @@ class Image(models.Model):
     trip_name = models.ForeignKey(Trip, to_field='trip_name',on_delete = models.CASCADE)
     image_annotations = models.TextField(default="")
 
+
 class Krill(models.Model):
     image_file = models.ForeignKey(Image,on_delete= models.CASCADE,blank=True, null=True)
     length = models.DecimalField(blank=True,null=True,max_digits=10 ,decimal_places=5)

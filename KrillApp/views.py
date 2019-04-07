@@ -4,8 +4,15 @@ from django.shortcuts import render
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from KrillApp.forms import ImageForm ,TripForm
-from KrillApp.models import Image, Trip, Krill
+from KrillApp.models import Image, Trip, Krill 
+import scipy.io
 from django.views import View
+from django.templatetags.static import static
+import os
+import cv2
+import pickle
+import numpy as np
+
 
 
 def Upload_Image(request):
@@ -50,6 +57,8 @@ def Get_User_Trips(request):
         trip_list.append(str(trip.trip_name))
     return render(request ,'view_trips.html', {'trip_list':trip_list})
 
+
+# FIX DELETE BUG
 def Get_Trip_Image_List(request):
     sql = 'SELECT * FROM Krillapp_image WHERE trip_name_id="' + str(request.POST['trip_to_get']) + '";'
     trip_image_list = []
@@ -107,6 +116,7 @@ class BasicUploadView(View):
         return JsonResponse(data)
 
 def Load_VIA(request):
+    #Process_Krill_Photo()
     sql = 'SELECT * FROM Krillapp_trip;'
     trip_list = []
     trips = Trip.objects.raw(sql)
@@ -116,7 +126,17 @@ def Load_VIA(request):
 
 
 def Save_Image_Annotations(request):
-    Image.objects.filter(image= request.POST['image_name']).update(image_annotations =  request.POST['image_annotations'])
+    # Saves the annotations to the image table too
+    Image.objects.filter(image= request.POST['image_file']).update(image_annotations =  request.POST['image_annotations'])
+    image = Image.objects.get(image= str(request.POST['image_file']))
+    annotations = request.POST['image_annotations']
+    # Removing the square brackets and quotations from the string
+    annotations = annotations[2:]
+    annotations = annotations[:-2]
+    # Split the string into individual annotations
+    annotations = annotations.split('","')
+    for i in annotations:
+        k = Krill.objects.create(image_file=image,image_annotation = i)
     return HttpResponse('/via')
 
 def Load_Image_Annotations(request):
@@ -126,7 +146,240 @@ def Load_Image_Annotations(request):
         'annotations':firstImage.image_annotations,
     })
 
-def Save_Image_Annotations_2(request):
-    image = Image.objects.get(image= str(request.POST['image_file']))
-    k = Krill.objects.create(image_file=image,image_annotation = request.POST['image_annotations'])
-    return HttpResponse('/via')
+
+
+def Detect_Krill(request):
+    #load in the foreground and ratio histogram classes
+    image = str(os.path.join(settings.MEDIA_ROOT, str(request.POST['image_file'])))
+    foregroundHist = scipy.io.loadmat(str(os.path.join(settings.STATIC_ROOT, 'MatlabFiles\\normalisedForeground32.mat')))
+    ratioHist = scipy.io.loadmat(str(os.path.join(settings.STATIC_ROOT, 'MatlabFiles\\ratioHistogram32.mat')))
+    histograms32 = HistogramConfig(foregroundHist, ratioHist, 32)
+    print("Normalising Image\n")
+    #newKrillImage = img_normalise(image)
+    newKrillImage = img_normalise(image)
+    print("Applying Logical Mask\n")
+    logical_mask = segmentKrill(newKrillImage, histograms32)
+    print("Performing Opening and Closing\n")
+    noiseReducedmask = performOpeningClosing(logical_mask)
+    print("Superimposing Bounding Boxes\n")
+    regions = createBoundingBoxes(noiseReducedmask,image )
+    return JsonResponse({
+            'annotations':regions,
+    })
+
+
+##
+##
+##      KRILL DETECTION OPERATIONS
+##
+##
+
+class HistogramConfig:
+    # so here we have the default parameters for the testing class
+    # otherwise we siply take the passed parameters
+    # this is defined as the instance variable
+    def __init__(self, foregroundHist, ratioHist, quantLevel = 32):
+
+        self.foregroundHist = foregroundHist
+        self.ratioHist = ratioHist
+        self.quantLevel = quantLevel
+
+
+# here we want to be able to find the bounding boxes based on the binary image
+# x,y,w,h = cv2.boundingRect(cnt) where (x, y) is top - left point and (w, h) is the width and height
+def createBoundingBoxes(img, original_image_path):
+    # first argument - source image, second argument -  contours to be drawn as a python list
+    # 3rd argument index of contours
+    # remaining arguments - colour and thickness
+    # cv2.drawContours(original_img, [rectangle], -1, (0, 0, 255), 3)
+    # Contours contains the rough co-ordinates of our contours.
+    contours = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)[0]
+
+    original_img = cv2.imread(original_image_path, cv2.IMREAD_COLOR)
+
+    num_contours = len(contours)
+
+    mean_area = 0
+
+    for i in range(0, num_contours):
+
+        mean_area += cv2.contourArea(contours[i])
+
+    mean_area = mean_area/num_contours
+
+    # way of going through each contour
+
+    regions = []
+    for i in range(0, num_contours):
+        if not(smallCountourCheck(contours[i], mean_area)):
+            xCoord,yCoord,w,h = cv2.boundingRect(contours[i])
+            box = {
+                "name": "rect",
+                "x": xCoord,
+                "y": yCoord,
+                "width": w,
+                "height": h
+            }
+            regions.append(box)
+            #rectangle = cv2.rectangle(original_img, (x,y), (x+w, y+h), (0, 0, 255), 5)
+
+
+ 
+
+    return regions
+#
+# Method to remove very small contour
+#
+def smallCountourCheck(c, mean):
+    return cv2.contourArea(c) < (0.2 * mean)
+
+
+# function to perform opening and closing
+# might need to use a different structuring element ?
+def performOpeningClosing(logicalImg):
+
+    firstKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+
+    secondKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (26, 26))
+
+    opening = cv2.morphologyEx(logicalImg, cv2.MORPH_OPEN, firstKernel)
+
+    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, secondKernel)
+
+
+    #cv2.namedWindow("output", cv2.WINDOW_NORMAL)
+    #newImg = cv2.resize(closing, (6048, 4032))
+    #cv2.imshow("output", newImg)
+    #cv2.waitKey(0)
+
+    return closing
+
+
+
+# this function is designed to take a normalised image and the respective histogram object
+# needs cleaning up for efficency
+# fixed normalisation algorithm
+def segmentKrill(normalisedImg,  histogram_object):
+
+    qLevels = histogram_object.quantLevel
+
+    # pre-calculated threshold values
+    GENERIC_THRESHOLD = 100.0
+    GENERIC_THREHOLD_FOREGROUND = 0.0001
+
+    # logical matrix for segmented image
+    logicalImg = cv2.cvtColor(normalisedImg, cv2.COLOR_BGR2GRAY)
+
+    # get the float representation
+    # floatRep =  normalisedImg.astype(float)
+
+    # new quantised image
+    normalisedImg[:, :, 0] = (normalisedImg[:, :, 0] / 255 * qLevels)
+    normalisedImg[:, :, 1] = (normalisedImg[:, :, 1] / 255 * qLevels)
+    normalisedImg[:, :, 2] = (normalisedImg[:, :, 2] / 255 * qLevels)
+
+    dimensions_tuple = normalisedImg.shape
+
+    for i in range(0, dimensions_tuple[0]):
+        for x in range(0, dimensions_tuple[1]):
+
+            bValue = normalisedImg.item(i, x, 0)
+            gValue = normalisedImg.item(i, x, 1)
+            rValue = normalisedImg.item(i, x, 2)
+
+            # need to decrement pixel index due to python conventions of starting from 0
+            ratioProb = histogram_object.ratioHist['ratioHist32'][rValue-1][gValue-1][bValue-1]
+            foregroundProb = histogram_object.foregroundHist['normalisedForeground'][rValue-1][gValue-1][bValue-1]
+
+            if ratioProb > GENERIC_THRESHOLD and foregroundProb > GENERIC_THREHOLD_FOREGROUND:
+                logicalImg.itemset((i, x), 255)
+            else:
+                logicalImg.itemset((i, x), 0)
+
+
+    #cv2.namedWindow("output", cv2.WINDOW_NORMAL)
+    #newImg = cv2.resize(logicalImg, (6048, 4032))
+    #cv2.imshow("output", newImg)
+    #cv2.waitKey(0)
+
+    return logicalImg
+
+
+
+# take an img path and return the read in img
+# read in colour image
+def read_img(imgPath):
+
+    img = cv2.imread(imgPath, cv2.IMREAD_COLOR)
+    cv2.imshow('image', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    return img
+
+# method to noramlise an image
+def img_normalise(imgPath):
+
+    # is read in as B G R
+    img = cv2.imread(imgPath, cv2.IMREAD_COLOR)
+
+    # load in the pre-pickled reference RGB array
+    # convert to float for later operations
+    ref_RGB = scipy.io.loadmat(str(os.path.join(settings.STATIC_ROOT, 'MatlabFiles\\MeanColourReference.mat')))
+    ref_colours = ref_RGB['meanColourRef']
+
+    # blue = red, green = green, red = blue
+    # this is the extracted colour channels for the image in question
+    blue = img[:, :, 0]
+    green = img[:, :, 1]
+    red = img[:, :, 2]
+
+    green_avg = np.mean(green)
+    red_avg = np.mean(red)
+    blue_avg = np.mean(blue)
+
+    # for blue channel we essentially need to cap the limit to 255. So must go through manually
+    for i in range(0, len(img[:, 1, :])):
+        for x in range(0, len(img[1, :, :])):
+            # do the following:
+            img.itemset((i, x, 0), calculatePixelValue(img.item(i, x, 0), blue_avg, ref_colours[0, 2]))
+
+
+
+    # img[:, :, 0] = (blue / blue_avg) * ref_colours[0, 2]
+
+    new_blue = np.clip(blue, 0, 255, out=blue)
+
+    # img[:, :, 0] = new_blue
+    img[:, :, 1] = (green / green_avg) * ref_colours[0, 1]
+    img[:, :, 2] = (red / red_avg) * ref_colours[0, 0]
+
+    # testing image
+   # cv2.namedWindow("output", cv2.WINDOW_NORMAL)
+    #newImg = cv2.resize(img, (6048, 4032))
+    #cv2.imshow("output", newImg)
+    #cv2.waitKey(0)
+
+    return img
+
+# need to manually set yhe value to be 255
+def calculatePixelValue(currentPixelValue, avg, ref_colour):
+
+    value = round((currentPixelValue / avg) * ref_colour)
+    if value > 255:
+        return 255
+    else:
+        return value
+
+
+# method to save an item with a filename
+def pickle_item(fileName, item2Pickle):
+
+    # write to the objectDump.text file
+    with open (fileName, 'wb') as f:
+        pickle.dump(item2Pickle, f, pickle.DEFAULT_PROTOCOL)
+
+# method to load an item based on the filepath
+def load_item(filePath):
+
+    with open(filePath, 'rb') as f:
+        return pickle.load(f)
