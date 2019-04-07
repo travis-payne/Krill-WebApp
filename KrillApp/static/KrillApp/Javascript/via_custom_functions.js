@@ -171,7 +171,9 @@ function user_click_image(path){
 
 function delete_photo(){
     
-    var image_to_delete = $("#image_panel img").attr("src");
+    var image_to_delete = $("#current_image").innerHTML;
+
+    // If there there is something to delete
     if (image_to_delete != null){
         var url = $("#delete_photo").attr("ajax-url");
     // Removes the django media URL from the URL.
@@ -188,7 +190,7 @@ function delete_photo(){
 
     $.ajax({type: "POST",
     url: url,
-    data: {image_url: media_url,
+    data: {image_url: image_to_delete,
             'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")},
     success:function(result){
         trip_change();
