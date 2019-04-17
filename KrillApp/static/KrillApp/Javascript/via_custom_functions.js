@@ -204,3 +204,6 @@ function delete_photo(){
 }
 
 
+
+
+

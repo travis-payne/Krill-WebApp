@@ -661,18 +661,44 @@
     integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
   <script type="text/javascript">
     $("#gallery").on("click", "td", function () {
-      clearRows()
-      DJANGO_STATIC_URL = '{{MEDIA_URL}}';
-      user_click_image(DJANGO_STATIC_URL + $(this).text());
-      document.getElementById("current_image").innerHTML = $(this).text();
-      $(this).css("background-color", "gray");
-      document.getElementById("annotation_toggle").style.display="block";
-      $('#toggle_annotations').bootstrapToggle('off')  
-    });
+      if($("#current_image").innerHTML==""){
+        $.confirm({
+            title: 'Save Annotations',
+            content: 'Do you want to save current annotations?',
+            buttons: {
+                confirm: function () {
+            clearRows()
+            DJANGO_STATIC_URL = '{{MEDIA_URL}}';
+            user_click_image(DJANGO_STATIC_URL + $(this).text());
+            document.getElementById("current_image").innerHTML = $(this).text();
+            $(this).css("background-color", "gray");
+            document.getElementById("annotation_toggle").style.display="block";
+            $('#toggle_annotations').bootstrapToggle('off')  
+
+                },
+                cancel: function () {
+                },
+            }
+        });
+        }
+        else{
+          clearRows()
+            DJANGO_STATIC_URL = '{{MEDIA_URL}}';
+            user_click_image(DJANGO_STATIC_URL + $(this).text());
+            document.getElementById("current_image").innerHTML = $(this).text();
+            $(this).css("background-color", "gray");
+            document.getElementById("annotation_toggle").style.display="block";
+            $('#toggle_annotations').bootstrapToggle('off')  
+        }
+
+      });
+
+  
 
     function clearRows() {
       $('#gallery tbody td').each(function () {
