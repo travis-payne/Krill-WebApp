@@ -1,4 +1,5 @@
 import cv2
+import scipy.io
 import pickle
 import numpy as np
 
@@ -23,7 +24,7 @@ def createBoundingBoxes(img, original_image_path):
     # remaining arguments - colour and thickness
     # cv2.drawContours(original_img, [rectangle], -1, (0, 0, 255), 3)
     # Contours contains the rough co-ordinates of our contours.
-    contours = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)[0]
+    contours = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
 
     original_img = cv2.imread(original_image_path, cv2.IMREAD_COLOR)
 
@@ -53,7 +54,7 @@ def createBoundingBoxes(img, original_image_path):
 # method to remove very small contour
 def smallCountourCheck(c, mean):
 
-    return cv2.contourArea(c) < (0.2 * mean)
+    return cv2.contourArea(c) < (0.3 * mean)
 
 
 
@@ -61,11 +62,11 @@ def smallCountourCheck(c, mean):
 # might need to use a different structuring element ?
 def performOpeningClosing(logicalImg):
 
-    firstKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+    firstKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
 
     secondKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (26, 26))
 
-    opening = cv2.morphologyEx(logicalImg, cv2.MORPH_OPEN, firstKernel)
+    opening = cv2.morphologyEx(logicalImg, cv2.MORPH_DILATE, firstKernel)
 
     closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, secondKernel)
 
@@ -87,8 +88,8 @@ def segmentKrill(normalisedImg,  histogram_object):
     qLevels = histogram_object.quantLevel
 
     # pre-calculated threshold values
-    GENERIC_THRESHOLD = 100.0
-    GENERIC_THREHOLD_FOREGROUND = 0.0001
+    GENERIC_THRESHOLD = 1000.0
+    GENERIC_THREHOLD_FOREGROUND = 0.00001
 
     # logical matrix for segmented image
     logicalImg = cv2.cvtColor(normalisedImg, cv2.COLOR_BGR2GRAY)
@@ -111,8 +112,8 @@ def segmentKrill(normalisedImg,  histogram_object):
             rValue = normalisedImg.item(i, x, 2)
 
             # need to decrement pixel index due to python conventions of starting from 0
-            ratioProb = histogram_object.ratioHist['ratioHist32'][rValue-1][gValue-1][bValue-1]
-            foregroundProb = histogram_object.foregroundHist['normalisedForeground'][rValue-1][gValue-1][bValue-1]
+            ratioProb = histogram_object.ratioHist['ratioHist32Final'][rValue-1][gValue-1][bValue-1]
+            foregroundProb = histogram_object.foregroundHist['normalisedHistogramB'][rValue-1][gValue-1][bValue-1]
 
             if ratioProb > GENERIC_THRESHOLD and foregroundProb > GENERIC_THREHOLD_FOREGROUND:
                 logicalImg.itemset((i, x), 255)
@@ -147,11 +148,15 @@ def img_normalise(imgPath):
 
     # load in the pre-pickled reference RGB array
     # convert to float for later operations
-    ref_RGB = scipy.io.loadmat("U:/Documents/MATLAB/KrillExperiments/MeanColourReference")
+    ref_RGB = scipy.io.loadmat("F:/Users/Rupert/Documents/Krill_Experiments/MeanColourReference.mat")
     ref_colours = ref_RGB['meanColourRef']
 
     # blue = red, green = green, red = blue
     # this is the extracted colour channels for the image in question
+
+    # new_cliped_image =  np.clip(img, 1, 255, out=img)
+
+
     blue = img[:, :, 0]
     green = img[:, :, 1]
     red = img[:, :, 2]
@@ -160,24 +165,13 @@ def img_normalise(imgPath):
     red_avg = np.mean(red)
     blue_avg = np.mean(blue)
 
-    # for blue channel we essentially need to cap the limit to 255. So must go through manually
-    for i in range(0, len(img[:, 1, :])):
-        for x in range(0, len(img[1, :, :])):
-            # do the following:
-            img.itemset((i, x, 0), calculatePixelValue(img.item(i, x, 0), blue_avg, ref_colours[0, 2]))
+
+    img[:, :, 0] = np.clip((blue / blue_avg) * ref_colours[0, 2], 0, 255)
+    img[:, :, 1] =  np.clip((green / green_avg) * ref_colours[0, 1], 0, 255)
+    img[:, :, 2] = np.clip((red / red_avg) * ref_colours[0, 0], 0, 255)
 
 
-
-    # img[:, :, 0] = (blue / blue_avg) * ref_colours[0, 2]
-
-    new_blue = np.clip(blue, 0, 255, out=blue)
-
-    # img[:, :, 0] = new_blue
-    img[:, :, 1] = (green / green_avg) * ref_colours[0, 1]
-    img[:, :, 2] = (red / red_avg) * ref_colours[0, 0]
-
-    # testing image
-   # cv2.namedWindow("output", cv2.WINDOW_NORMAL)
+    #cv2.namedWindow("output", cv2.WINDOW_NORMAL)
     #newImg = cv2.resize(img, (6048, 4032))
     #cv2.imshow("output", newImg)
     #cv2.waitKey(0)
@@ -211,19 +205,19 @@ def load_item(filePath):
 def main():
 
     # load in the foreground and ratio histogram classes
-    foregroundHist = scipy.io.loadmat("U:/Documents/MATLAB/KrillExperiments\MatLab_Segmentation_Variables/ForegroundHistogram/qLevels32/normalisedForeground32.mat")
+    foregroundHist = scipy.io.loadmat("F:/Users/Rupert/Documents/Krill_Experiments/MatLab_Segmentation_Variables/Test_Histograms/TestingHistBForeground.mat")
 
-    ratioHist = scipy.io.loadmat("U:/Documents/MATLAB/KrillExperiments/MatLab_Segmentation_Variables/RatioHistogram/ratioHistogram32.mat")
+    ratioHist = scipy.io.loadmat("F:/Users/Rupert/Documents/Krill_Experiments/MatLab_Segmentation_Variables/Test_Histograms/RatioHistogramFinal32.mat")
 
     histograms32 = HistogramConfig(foregroundHist, ratioHist, 32)
 
-    newKrillImage = img_normalise('E:/Masters Folder/Masters Year/KrillExperiments/JR255A/Krill Images - Sorted/JR255A_krill_image_1.JPG')
+    newKrillImage = img_normalise("F:/Users/Rupert/Documents/Krill_Experiments/LMAO3.jpeg")
 
     logical_mask = segmentKrill(newKrillImage, histograms32)
 
     noiseReducedmask = performOpeningClosing(logical_mask)
 
-    createBoundingBoxes(noiseReducedmask, 'E:/Masters Folder/Masters Year/KrillExperiments/JR255A/Krill Images - Sorted/JR255A_krill_image_1.JPG')
+    createBoundingBoxes(noiseReducedmask, "F:/Users/Rupert/Documents/Krill_Experiments/LMAO3.jpeg")
 
 
 if __name__ == '__main__':
