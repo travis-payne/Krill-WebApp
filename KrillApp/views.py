@@ -193,7 +193,7 @@ def createBoundingBoxes(img, original_image_path):
     # remaining arguments - colour and thickness
     # cv2.drawContours(original_img, [rectangle], -1, (0, 0, 255), 3)
     # Contours contains the rough co-ordinates of our contours.
-    contours = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)[0]
+    contours = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
 
     original_img = cv2.imread(original_image_path, cv2.IMREAD_COLOR)
 
@@ -231,7 +231,7 @@ def createBoundingBoxes(img, original_image_path):
 # Method to remove very small contour
 #
 def smallCountourCheck(c, mean):
-    return cv2.contourArea(c) < (0.2 * mean)
+    return cv2.contourArea(c) < (0.3 * mean)
 
 
 # function to perform opening and closing
@@ -242,7 +242,7 @@ def performOpeningClosing(logicalImg):
 
     secondKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (26, 26))
 
-    opening = cv2.morphologyEx(logicalImg, cv2.MORPH_OPEN, firstKernel)
+    opening = cv2.morphologyEx(logicalImg, cv2.MORPH_DILATE, firstKernel)
 
     closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, secondKernel)
 
@@ -264,8 +264,8 @@ def segmentKrill(normalisedImg,  histogram_object):
     qLevels = histogram_object.quantLevel
 
     # pre-calculated threshold values
-    GENERIC_THRESHOLD = 100.0
-    GENERIC_THREHOLD_FOREGROUND = 0.0001
+    GENERIC_THRESHOLD = 1000.0
+    GENERIC_THREHOLD_FOREGROUND = 0.00001
 
     # logical matrix for segmented image
     logicalImg = cv2.cvtColor(normalisedImg, cv2.COLOR_BGR2GRAY)
@@ -288,9 +288,9 @@ def segmentKrill(normalisedImg,  histogram_object):
             rValue = normalisedImg.item(i, x, 2)
 
             # need to decrement pixel index due to python conventions of starting from 0
-            ratioProb = histogram_object.ratioHist['ratioHist32'][rValue-1][gValue-1][bValue-1]
-            foregroundProb = histogram_object.foregroundHist['normalisedForeground'][rValue-1][gValue-1][bValue-1]
-
+            ratioProb = histogram_object.ratioHist['ratioHist32Final'][rValue-1][gValue-1][bValue-1]
+            foregroundProb = histogram_object.foregroundHist['normalisedHistogramB'][rValue-1][gValue-1][bValue-1]
+            
             if ratioProb > GENERIC_THRESHOLD and foregroundProb > GENERIC_THREHOLD_FOREGROUND:
                 logicalImg.itemset((i, x), 255)
             else:
@@ -338,10 +338,10 @@ def img_normalise(imgPath):
     blue_avg = np.mean(blue)
 
     # for blue channel we essentially need to cap the limit to 255. So must go through manually
-    for i in range(0, len(img[:, 1, :])):
-        for x in range(0, len(img[1, :, :])):
-            # do the following:
-            img.itemset((i, x, 0), calculatePixelValue(img.item(i, x, 0), blue_avg, ref_colours[0, 2]))
+    img[:, :, 0] = np.clip((blue / blue_avg) * ref_colours[0, 2], 0, 255)
+    img[:, :, 1] =  np.clip((green / green_avg) * ref_colours[0, 1], 0, 255)
+    img[:, :, 2] = np.clip((red / red_avg) * ref_colours[0, 0], 0, 255)
+    
 
 
 
