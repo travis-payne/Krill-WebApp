@@ -211,13 +211,13 @@ def main():
 
     histograms32 = HistogramConfig(foregroundHist, ratioHist, 32)
 
-    newKrillImage = img_normalise("F:/Users/Rupert/Documents/Krill_Experiments/LMAO3.jpeg")
+    newKrillImage = img_normalise("F:/Users/Rupert/Documents/Krill_Experiments/JR255A_krill_image_4.JPG")
 
     logical_mask = segmentKrill(newKrillImage, histograms32)
 
     noiseReducedmask = performOpeningClosing(logical_mask)
 
-    createBoundingBoxes(noiseReducedmask, "F:/Users/Rupert/Documents/Krill_Experiments/LMAO3.jpeg")
+    createBoundingBoxes(noiseReducedmask, "F:/Users/Rupert/Documents/Krill_Experiments/JR255A_krill_image_4.JPG")
 
 
 if __name__ == '__main__':
