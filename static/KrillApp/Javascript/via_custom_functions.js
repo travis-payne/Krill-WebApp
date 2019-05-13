@@ -68,6 +68,7 @@ function save_annotations_to_DB(){
         }
     })
 
+    // Defunct??
     var url = $("#save_annotations").attr("ajax-url-2"); // gets text contents of clicked li
 
     for(var i = 0; i < csvArray.length; i++){

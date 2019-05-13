@@ -343,16 +343,6 @@ def img_normalise(imgPath):
     img[:, :, 2] = np.clip((red / red_avg) * ref_colours[0, 0], 0, 255)
     
 
-
-
-    # img[:, :, 0] = (blue / blue_avg) * ref_colours[0, 2]
-
-    new_blue = np.clip(blue, 0, 255, out=blue)
-
-    # img[:, :, 0] = new_blue
-    img[:, :, 1] = (green / green_avg) * ref_colours[0, 1]
-    img[:, :, 2] = (red / red_avg) * ref_colours[0, 0]
-
     # testing image
    # cv2.namedWindow("output", cv2.WINDOW_NORMAL)
     #newImg = cv2.resize(img, (6048, 4032))
