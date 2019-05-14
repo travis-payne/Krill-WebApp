@@ -339,11 +339,15 @@ def img_normalise(imgPath):
 
     # for blue channel we essentially need to cap the limit to 255. So must go through manually
     img[:, :, 0] = np.clip((blue / blue_avg) * ref_colours[0, 2], 0, 255)
-    img[:, :, 1] =  np.clip((green / green_avg) * ref_colours[0, 1], 0, 255)
+    img[:, :, 1] = np.clip((green / green_avg) * ref_colours[0, 1], 0, 255)
     img[:, :, 2] = np.clip((red / red_avg) * ref_colours[0, 0], 0, 255)
+<<<<<<< HEAD
     
 
     # testing image
+=======
+
+>>>>>>> cd5bd754980081a703757ea5e65138237bd12a30
    # cv2.namedWindow("output", cv2.WINDOW_NORMAL)
     #newImg = cv2.resize(img, (6048, 4032))
     #cv2.imshow("output", newImg)
