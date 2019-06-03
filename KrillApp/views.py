@@ -149,6 +149,8 @@ def Load_Image_Annotations(request):
 
 
 def Detect_Krill(request):
+
+    FAST = True
     #load in the foreground and ratio histogram classes
     image = str(os.path.join(settings.MEDIA_ROOT, str(request.POST['image_file'])))
     foregroundHist = scipy.io.loadmat(str(os.path.join(settings.STATIC_ROOT, 'MatlabFiles\\normalisedForeground32.mat')))
@@ -158,7 +160,7 @@ def Detect_Krill(request):
     #newKrillImage = img_normalise(image)
     newKrillImage = img_normalise(image)
     print("Applying Logical Mask\n")
-    logical_mask = segmentKrill(newKrillImage, histograms32)
+    logical_mask = segmentKrill(newKrillImage, histograms32, FAST)
     print("Performing Opening and Closing\n")
     noiseReducedmask = performOpeningClosing(logical_mask)
     print("Superimposing Bounding Boxes\n")
@@ -238,7 +240,7 @@ def smallCountourCheck(c, mean):
 # might need to use a different structuring element ?
 def performOpeningClosing(logicalImg):
 
-    firstKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+    firstKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
 
     secondKernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (26, 26))
 
@@ -254,12 +256,8 @@ def performOpeningClosing(logicalImg):
 
     return closing
 
-
-
 # this function is designed to take a normalised image and the respective histogram object
-# needs cleaning up for efficency
-# fixed normalisation algorithm
-def segmentKrill(normalisedImg,  histogram_object):
+def segmentKrill(normalisedImg,  histogram_object, FAST):
 
     qLevels = histogram_object.quantLevel
 
@@ -273,34 +271,74 @@ def segmentKrill(normalisedImg,  histogram_object):
     # get the float representation
     # floatRep =  normalisedImg.astype(float)
 
-    # new quantised image
-    normalisedImg[:, :, 0] = (normalisedImg[:, :, 0] / 255 * qLevels)
-    normalisedImg[:, :, 1] = (normalisedImg[:, :, 1] / 255 * qLevels)
-    normalisedImg[:, :, 2] = (normalisedImg[:, :, 2] / 255 * qLevels)
+    if not FAST:
+        # new quantised image
+        normalisedImg[:, :, 0] = (normalisedImg[:, :, 0] / 255 * qLevels)
+        normalisedImg[:, :, 1] = (normalisedImg[:, :, 1] / 255 * qLevels)
+        normalisedImg[:, :, 2] = (normalisedImg[:, :, 2] / 255 * qLevels)
 
-    dimensions_tuple = normalisedImg.shape
+        dimensions_tuple = normalisedImg.shape
 
-    for i in range(0, dimensions_tuple[0]):
-        for x in range(0, dimensions_tuple[1]):
+        for i in range(0, dimensions_tuple[0]):
+            for x in range(0, dimensions_tuple[1]):
 
-            bValue = normalisedImg.item(i, x, 0)
-            gValue = normalisedImg.item(i, x, 1)
-            rValue = normalisedImg.item(i, x, 2)
+                bValue = normalisedImg.item(i, x, 0)
+                gValue = normalisedImg.item(i, x, 1)
+                rValue = normalisedImg.item(i, x, 2)
 
-            # need to decrement pixel index due to python conventions of starting from 0
-            ratioProb = histogram_object.ratioHist['ratioHist32Final'][rValue-1][gValue-1][bValue-1]
-            foregroundProb = histogram_object.foregroundHist['normalisedHistogramB'][rValue-1][gValue-1][bValue-1]
-            
-            if ratioProb > GENERIC_THRESHOLD and foregroundProb > GENERIC_THREHOLD_FOREGROUND:
-                logicalImg.itemset((i, x), 255)
-            else:
-                logicalImg.itemset((i, x), 0)
+                # need to decrement pixel index due to python conventions of starting from 0
+                ratioProb = histogram_object.ratioHist['ratioHist32Final'][rValue-1][gValue-1][bValue-1]
+                foregroundProb = histogram_object.foregroundHist['normalisedHistogramB'][rValue-1][gValue-1][bValue-1]
 
+                if ratioProb > GENERIC_THRESHOLD and foregroundProb > GENERIC_THREHOLD_FOREGROUND:
+                    logicalImg.itemset((i, x), 255)
+                else:
+                    logicalImg.itemset((i, x), 0)
+    else:
 
-    #cv2.namedWindow("output", cv2.WINDOW_NORMAL)
-    #newImg = cv2.resize(logicalImg, (6048, 4032))
-    #cv2.imshow("output", newImg)
-    #cv2.waitKey(0)
+        foregroundHist = histogram_object.foregroundHist['normalisedHistogramB']
+        ratioHistogram = histogram_object.ratioHist['ratioHist32Final']
+
+        # we want to index the histogram based on the BGR combonations of the
+        # normalised image, with isolated channels
+        # B channel
+        first_index = np.clip((normalisedImg[:, :, 0]) - 1, 0, 31)
+        # G Channel
+        second_index = np.clip((normalisedImg[:, :, 1]) - 1, 0, 31)
+        # R channel
+        third_index = np.clip((normalisedImg[:, :, 2]) - 1, 0, 31)
+
+        dimensions = logicalImg.shape
+
+        foreground_probabilities_pixels = np.zeros(dimensions, dtype='float64')
+
+        ratio_probabilities_pixels = np.zeros(dimensions, dtype='float64')
+
+        foreground_probabilities_pixels[:, :] = foregroundHist[third_index, second_index, first_index]
+
+        ratio_probabilities_pixels[:, :] = ratioHistogram[third_index, second_index, first_index]
+
+        foreground_thresh = foreground_probabilities_pixels > GENERIC_THREHOLD_FOREGROUND
+        foreground_second_thresh = foreground_probabilities_pixels < GENERIC_THREHOLD_FOREGROUND
+
+        ratio_thresh = ratio_probabilities_pixels > GENERIC_THRESHOLD
+        ratio_second_thresh = ratio_probabilities_pixels < GENERIC_THRESHOLD
+
+        foreground_probabilities_pixels[foreground_thresh] = 255
+        foreground_probabilities_pixels[foreground_second_thresh] = 0
+
+        ratio_probabilities_pixels[ratio_thresh] = 255
+        ratio_probabilities_pixels[ratio_second_thresh] = 0
+
+        logical_combine = np.logical_and(ratio_thresh, foreground_thresh)
+        logical_second_combine = np.logical_and(ratio_second_thresh, foreground_second_thresh)
+
+        ratio_probabilities_pixels[logical_combine] = 255
+        ratio_probabilities_pixels[logical_second_combine] = 0
+
+        # logicalImg = np.where(final_threshold, foreground_probabilities_pixels, ratio_probabilities_pixels)
+
+        logicalImg = ratio_probabilities_pixels.astype('uint8')
 
     return logicalImg
 
