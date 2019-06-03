@@ -271,11 +271,13 @@ def segmentKrill(normalisedImg,  histogram_object, FAST):
     # get the float representation
     # floatRep =  normalisedImg.astype(float)
 
+    # new quantised image
+    normalisedImg[:, :, 0] = (normalisedImg[:, :, 0] / 255 * qLevels)
+    normalisedImg[:, :, 1] = (normalisedImg[:, :, 1] / 255 * qLevels)
+    normalisedImg[:, :, 2] = (normalisedImg[:, :, 2] / 255 * qLevels)
+
+
     if not FAST:
-        # new quantised image
-        normalisedImg[:, :, 0] = (normalisedImg[:, :, 0] / 255 * qLevels)
-        normalisedImg[:, :, 1] = (normalisedImg[:, :, 1] / 255 * qLevels)
-        normalisedImg[:, :, 2] = (normalisedImg[:, :, 2] / 255 * qLevels)
 
         dimensions_tuple = normalisedImg.shape
 
