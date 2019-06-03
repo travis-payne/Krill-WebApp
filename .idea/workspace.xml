@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4a13c99-066b-43b7-a230-9672c00fbbec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/KrillApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/KrillApp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/KrillApp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="231" column="1" lean-forward="true" selection-start-line="231" selection-start-column="1" selection-end-line="231" selection-end-column="1" />
+            <state relative-caret-position="262">
+              <caret line="240" column="38" lean-forward="true" selection-start-line="240" selection-start-column="38" selection-end-line="240" selection-end-column="38" />
               <folding>
                 <element signature="e#0#72#0" expanded="true" />
               </folding>
@@ -45,7 +44,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="953" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
@@ -136,12 +135,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1559560249135</updated>
-      <workItem from="1559560252191" duration="4655000" />
+      <workItem from="1559560252191" duration="5360000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4655000" />
+    <option name="totallyTimeSpent" value="5360000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="953" y="0" width="974" height="1047" extended-state="0" />
@@ -154,11 +153,11 @@
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
-      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.33260393" />
+      <window_info anchor="bottom" id="Terminal" weight="0.33260393" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.41495124" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.41466084" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -176,8 +175,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/KrillApp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="231" column="1" lean-forward="true" selection-start-line="231" selection-start-column="1" selection-end-line="231" selection-end-column="1" />
+        <state relative-caret-position="262">
+          <caret line="240" column="38" lean-forward="true" selection-start-line="240" selection-start-column="38" selection-end-line="240" selection-end-column="38" />
           <folding>
             <element signature="e#0#72#0" expanded="true" />
           </folding>
