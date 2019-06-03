@@ -233,7 +233,7 @@ def createBoundingBoxes(img, original_image_path):
 # Method to remove very small contour
 #
 def smallCountourCheck(c, mean):
-    return cv2.contourArea(c) < (0.3 * mean)
+    return cv2.contourArea(c) < (0.5 * mean)
 
 
 # function to perform opening and closing
