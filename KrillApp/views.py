@@ -12,6 +12,8 @@ import os
 import cv2
 import pickle
 import numpy as np
+import ast
+
 
 
 
@@ -129,14 +131,16 @@ def Save_Image_Annotations(request):
     # Saves the annotations to the image table too
     Image.objects.filter(image= request.POST['image_file']).update(image_annotations =  request.POST['image_annotations'])
     image = Image.objects.get(image= str(request.POST['image_file']))
-    annotations = request.POST['image_annotations']
+    bounding_boxes = request.POST['image_annotations']
+    krill_attributes = request.POST['krill_attributes']
     # Removing the square brackets and quotations from the string
-    annotations = annotations[2:]
-    annotations = annotations[:-2]
+    bounding_boxes = bounding_boxes[2:]
+    bounding_boxes = bounding_boxes[:-2]
     # Split the string into individual annotations
-    annotations = annotations.split('","')
-    for i in annotations:
-        k = Krill.objects.create(image_file=image,image_annotation = i)
+    bounding_boxes = bounding_boxes.split('","')
+    krill_attributes = ast.literal_eval(krill_attributes)
+    for i in range(len(krill_attributes)):
+        k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Length'] )
     return HttpResponse('/via')
 
 def Load_Image_Annotations(request):

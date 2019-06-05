@@ -45,12 +45,12 @@ function save_annotations_to_DB(){
             console.log( r[i].region_attributes);
             var rattr = map_to_json( r[i].region_attributes );
             rattr = '"' +  escape_for_csv( rattr ) + '"';
-            csvlineAttributes.push(rattr);
-            console.log(rattr);
+            csvlineAttributes.push(r[i].region_attributes);
   
           }
         }
       }
+      console.log(csvlineAttributes);
       if(csvlineAttributes.length != 0){
           csvArrayAttributes = csvlineAttributes;
             csvlineAttributes = JSON.stringify(csvlineAttributes);
@@ -84,6 +84,7 @@ function save_annotations_to_DB(){
             data: {
                 image_file: image,
                 image_annotations: JSON.stringify(csvArray),
+                krill_attributes: csvlineAttributes,
                 'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
             },
             success: function (result) {
