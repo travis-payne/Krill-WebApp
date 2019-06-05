@@ -146,6 +146,8 @@ def Load_Image_Annotations(request):
         'annotations':firstImage.image_annotations,
     })
 
+#def Pull_SQL_Data():
+
 
 
 def Detect_Krill(request):
