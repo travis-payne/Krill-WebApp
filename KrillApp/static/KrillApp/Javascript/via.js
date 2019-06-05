@@ -319,6 +319,7 @@ function file_metadata(filename, size) {
 function file_region() {
   this.shape_attributes  = {}; // region shape attributes
   this.region_attributes = {}; // region attributes
+  this.region_id=0;
 }
 
 //
@@ -1086,6 +1087,7 @@ function pack_via_metadata(return_type) {
           csvline.push(sattr);
           console.log(sattr);
 
+          // Regions attributs are HERE.
           var rattr = map_to_json( r[i].region_attributes );
           rattr = '"' +  escape_for_csv( rattr ) + '"';
           csvline.push(rattr);

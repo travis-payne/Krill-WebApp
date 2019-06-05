@@ -33,4 +33,5 @@ class Krill(models.Model):
     length = models.DecimalField(blank=True,null=True,max_digits=10 ,decimal_places=5)
     maturity = models.CharField(blank=True, null=True,max_length=30,default="")
     image_annotation = models.TextField(default="")
+    unique_krill_id = models.CharField(blank=False,null=False,unique=True,max_length=50)
 
