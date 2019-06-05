@@ -133,14 +133,23 @@ def Save_Image_Annotations(request):
     image = Image.objects.get(image= str(request.POST['image_file']))
     bounding_boxes = request.POST['image_annotations']
     krill_attributes = request.POST['krill_attributes']
+
+    region_id = request.POST['region']
     # Removing the square brackets and quotations from the string
     bounding_boxes = bounding_boxes[2:]
     bounding_boxes = bounding_boxes[:-2]
     # Split the string into individual annotations
     bounding_boxes = bounding_boxes.split('","')
     krill_attributes = ast.literal_eval(krill_attributes)
+    region_id = ast.literal_eval(region_id)
+
     for i in range(len(krill_attributes)):
-        k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Length'] )
+        unique_id = str(request.POST['image_file']) + "-" + str(region_id[i])
+        obj, created = Krill.objects.update_or_create(
+            unique_krill_id = unique_id,
+            defaults={'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
+        )
+       # k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Maturity'] )
     return HttpResponse('/via')
 
 def Load_Image_Annotations(request):

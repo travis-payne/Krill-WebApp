@@ -31,26 +31,24 @@ function save_annotations_to_DB(){
 
     var csvlineAttributes = [];
     var csvArrayAttributes= [];
+    var region_ids = [];
 
     for ( var image_id in _via_img_metadata ) { 
         var r = _via_img_metadata[image_id].regions;
         if ( r.length !==0 ) {
           for ( var i = 0; i < r.length; ++i ) {
-  
             // Shape attributes are HERE.
             var sattr = map_to_json( r[i].shape_attributes );
             csvline.push(sattr);
 
             // Region Attributes
-            console.log( r[i].region_attributes);
             var rattr = map_to_json( r[i].region_attributes );
             rattr = '"' +  escape_for_csv( rattr ) + '"';
             csvlineAttributes.push(r[i].region_attributes);
-  
+            region_ids.push(r[i].region_id);
           }
         }
       }
-      console.log(csvlineAttributes);
       if(csvlineAttributes.length != 0){
           csvArrayAttributes = csvlineAttributes;
             csvlineAttributes = JSON.stringify(csvlineAttributes);
@@ -74,7 +72,6 @@ function save_annotations_to_DB(){
       // Removes whitespace
       image = image.trim();
 
-
     var url = $("#save_annotations").attr("ajax-url"); // gets text contents of clicked li
 
 
@@ -85,6 +82,7 @@ function save_annotations_to_DB(){
                 image_file: image,
                 image_annotations: JSON.stringify(csvArray),
                 krill_attributes: csvlineAttributes,
+                region: JSON.stringify(region_ids),
                 'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
             },
             success: function (result) {

@@ -1545,6 +1545,7 @@ function draw_all_region_id() {
     // then, draw text over this background rectangle
     _via_reg_ctx.globalAlpha = 1.0;
     _via_reg_ctx.fillStyle = 'yellow';
+    _via_img_metadata[_via_image_id].regions[i].region_id=annotation_str;
     _via_reg_ctx.fillText(annotation_str,
                           Math.floor(x + 0.4*char_width),
                           Math.floor(y - 0.35*char_height));

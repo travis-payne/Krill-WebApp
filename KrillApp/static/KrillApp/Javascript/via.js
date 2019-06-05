@@ -319,6 +319,7 @@ function file_metadata(filename, size) {
 function file_region() {
   this.shape_attributes  = {}; // region shape attributes
   this.region_attributes = {}; // region attributes
+  this.region_id=0;
 }
 
 //
