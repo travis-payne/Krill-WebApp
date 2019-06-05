@@ -32,7 +32,7 @@ function save_annotations_to_DB(){
     var csvlineAttributes = [];
     var csvArrayAttributes= [];
 
-    for ( var image_id in _via_img_metadata ) {
+    for ( var image_id in _via_img_metadata ) { 
         var r = _via_img_metadata[image_id].regions;
         if ( r.length !==0 ) {
           for ( var i = 0; i < r.length; ++i ) {
@@ -42,6 +42,7 @@ function save_annotations_to_DB(){
             csvline.push(sattr);
 
             // Region Attributes
+            console.log( r[i].region_attributes);
             var rattr = map_to_json( r[i].region_attributes );
             rattr = '"' +  escape_for_csv( rattr ) + '"';
             csvlineAttributes.push(rattr);
@@ -223,6 +224,18 @@ function delete_photo(){
 
 }
 
+$( document ).ready(function() {
+    _via_attributes['region']['Length'] = {type: "text",description:"",default_value:""};
+    _via_attributes['region']['Maturity'] = {type: "text",description:"",default_value:""};
+    var rattr_id_list = Object.keys(_via_attributes['region']);
+    _via_attribute_being_updated = 'region';
+    _via_current_attribute_id = rattr_id_list[0];
+    //rattr_count = 2;
+    attribute_update_panel_set_active_button();
+    update_attributes_update_panel();
+    annotation_editor_update_content();
+    console.log("test");
+});
 
 
 

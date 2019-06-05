@@ -3539,7 +3539,7 @@ function show_attribute_options() {
 
   var attr_id = attr_list.value;
   var attr_type = _via_attributes[_via_attribute_being_updated][attr_id].type;
-
+  console.log(_via_attributes);
   // populate additional options based on attribute type
   switch( attr_type ) {
   case VIA_ATTRIBUTE_TYPE.TEXT:

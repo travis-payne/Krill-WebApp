@@ -1086,6 +1086,7 @@ function pack_via_metadata(return_type) {
           csvline.push(sattr);
           console.log(sattr);
 
+          // Regions attributs are HERE.
           var rattr = map_to_json( r[i].region_attributes );
           rattr = '"' +  escape_for_csv( rattr ) + '"';
           csvline.push(rattr);
