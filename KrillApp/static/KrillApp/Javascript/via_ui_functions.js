@@ -4366,7 +4366,7 @@ function hide_user_input_panel() {
 function annotation_editor_show() {
   // remove existing annotation editor (if any)
   annotation_editor_remove();
-
+  console.log("HEY");
   // create new container of annotation editor
   var ae = document.createElement('div');
   ae.setAttribute('id', 'annotation_editor');
@@ -4389,6 +4389,7 @@ function annotation_editor_show() {
         var html_position = annotation_editor_get_placement(_via_user_sel_region_id);
         ae.style.top = html_position.top;
         ae.style.left = html_position.left;
+        ae.style.width = '20%';
       }
       _via_display_area.appendChild(ae);
       annotation_editor_update_content();

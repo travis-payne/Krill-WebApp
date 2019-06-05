@@ -29,6 +29,9 @@ function save_annotations_to_DB(){
     var csvline = [];
     var csvArray= [];
 
+    var csvlineAttributes = [];
+    var csvArrayAttributes= [];
+
     for ( var image_id in _via_img_metadata ) {
         var r = _via_img_metadata[image_id].regions;
         if ( r.length !==0 ) {
@@ -37,17 +40,34 @@ function save_annotations_to_DB(){
             // Shape attributes are HERE.
             var sattr = map_to_json( r[i].shape_attributes );
             csvline.push(sattr);
+
+            // Region Attributes
+            var rattr = map_to_json( r[i].region_attributes );
+            rattr = '"' +  escape_for_csv( rattr ) + '"';
+            csvlineAttributes.push(rattr);
+            console.log(rattr);
   
           }
         }
       }
-      if(csvline.length != 0){
-          csvArray = csvline;
-      csvline = JSON.stringify(csvline);
+      if(csvlineAttributes.length != 0){
+          csvArrayAttributes = csvlineAttributes;
+            csvlineAttributes = JSON.stringify(csvlineAttributes);
       }
       else{
-          csvline = "";
+          csvlineAttributes = "";
       }
+
+      if(csvline.length != 0){
+        csvArray = csvline;
+        csvline = JSON.stringify(csvline);
+    }
+    else{
+        csvline = "";
+    }
+
+
+
       var image = document.getElementById("current_image").innerHTML;
       image = image.replace($("#delete_photo").attr("media-url"),"");
       // Removes whitespace
