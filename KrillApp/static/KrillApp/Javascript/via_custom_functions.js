@@ -31,12 +31,12 @@ function save_annotations_to_DB(){
 
     var csvlineAttributes = [];
     var csvArrayAttributes= [];
+    var region_ids = [];
 
-    for ( var image_id in _via_img_metadata ) {
+    for ( var image_id in _via_img_metadata ) { 
         var r = _via_img_metadata[image_id].regions;
         if ( r.length !==0 ) {
           for ( var i = 0; i < r.length; ++i ) {
-  
             // Shape attributes are HERE.
             var sattr = map_to_json( r[i].shape_attributes );
             csvline.push(sattr);
@@ -44,9 +44,8 @@ function save_annotations_to_DB(){
             // Region Attributes
             var rattr = map_to_json( r[i].region_attributes );
             rattr = '"' +  escape_for_csv( rattr ) + '"';
-            csvlineAttributes.push(rattr);
-            console.log(rattr);
-  
+            csvlineAttributes.push(r[i].region_attributes);
+            region_ids.push(r[i].region_id);
           }
         }
       }
@@ -73,7 +72,6 @@ function save_annotations_to_DB(){
       // Removes whitespace
       image = image.trim();
 
-
     var url = $("#save_annotations").attr("ajax-url"); // gets text contents of clicked li
 
 
@@ -83,6 +81,8 @@ function save_annotations_to_DB(){
             data: {
                 image_file: image,
                 image_annotations: JSON.stringify(csvArray),
+                krill_attributes: csvlineAttributes,
+                region: JSON.stringify(region_ids),
                 'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
             },
             success: function (result) {
@@ -223,6 +223,18 @@ function delete_photo(){
 
 }
 
+$( document ).ready(function() {
+    _via_attributes['region']['Length'] = {type: "text",description:"",default_value:""};
+    _via_attributes['region']['Maturity'] = {type: "text",description:"",default_value:""};
+    var rattr_id_list = Object.keys(_via_attributes['region']);
+    _via_attribute_being_updated = 'region';
+    _via_current_attribute_id = rattr_id_list[0];
+    //rattr_count = 2;
+    attribute_update_panel_set_active_button();
+    update_attributes_update_panel();
+    annotation_editor_update_content();
+    console.log("test");
+});
 
 
 

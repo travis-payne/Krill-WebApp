@@ -1545,6 +1545,7 @@ function draw_all_region_id() {
     // then, draw text over this background rectangle
     _via_reg_ctx.globalAlpha = 1.0;
     _via_reg_ctx.fillStyle = 'yellow';
+    _via_img_metadata[_via_image_id].regions[i].region_id=annotation_str;
     _via_reg_ctx.fillText(annotation_str,
                           Math.floor(x + 0.4*char_width),
                           Math.floor(y - 0.35*char_height));
@@ -3539,7 +3540,7 @@ function show_attribute_options() {
 
   var attr_id = attr_list.value;
   var attr_type = _via_attributes[_via_attribute_being_updated][attr_id].type;
-
+  console.log(_via_attributes);
   // populate additional options based on attribute type
   switch( attr_type ) {
   case VIA_ATTRIBUTE_TYPE.TEXT:
