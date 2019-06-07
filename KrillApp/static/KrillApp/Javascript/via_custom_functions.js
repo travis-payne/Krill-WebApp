@@ -89,7 +89,7 @@ function save_annotations_to_DB(){
                 console.log(result);
                     $.alert({
                         title: 'Save Annotations',
-                        content: 'Annotations saved to database!',
+                        content: result['message']
                 
                     });
                 

@@ -16,6 +16,7 @@ import pickle
 import numpy as np
 import json
 import ast
+import sys
 from django.core.serializers.json import DjangoJSONEncoder
 
 
@@ -133,28 +134,39 @@ def Load_VIA(request):
 
 
 def Save_Image_Annotations(request):
-    # Saves the annotations to the image table too
-    Image.objects.filter(image= request.POST['image_file']).update(image_annotations =  request.POST['image_annotations'])
-    image = Image.objects.get(image= str(request.POST['image_file']))
-    bounding_boxes = request.POST['image_annotations']
-    krill_attributes = request.POST['krill_attributes']
-    region_id = request.POST['region']
-    # Removing the square brackets and quotations from the string
-    bounding_boxes = bounding_boxes[2:]
-    bounding_boxes = bounding_boxes[:-2]
-    # Split the string into individual annotations
-    bounding_boxes = bounding_boxes.split('","')
-    krill_attributes = ast.literal_eval(krill_attributes)
-    region_id = ast.literal_eval(region_id)
+    try:
+        # Saves the annotations to the image table too
+        Image.objects.filter(image= request.POST['image_file']).update(image_annotations =  request.POST['image_annotations'])
+        image = Image.objects.get(image= str(request.POST['image_file']))
+        bounding_boxes = request.POST['image_annotations']
+        krill_attributes = request.POST['krill_attributes']
+        region_id = request.POST['region']
+        # Removing the square brackets and quotations from the string
+        bounding_boxes = bounding_boxes[2:]
+        bounding_boxes = bounding_boxes[:-2]
+        # Split the string into individual annotations
+        bounding_boxes = bounding_boxes.split('","')
+        krill_attributes = ast.literal_eval(krill_attributes)
+        region_id = ast.literal_eval(region_id)
 
-    for i in range(len(krill_attributes)):
-        unique_id = str(image.file_name) + "-" + str(region_id[i])
-        obj, created = Krill.objects.update_or_create(
-            unique_krill_id = unique_id,
-            defaults={'bounding_box_num':str(region_id[i]),'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
-        )
-       # k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Maturity'] )
-    return HttpResponse('/via')
+        for i in range(len(krill_attributes)):
+            unique_id = str(image.file_name) + "-" + str(region_id[i])
+            obj, created = Krill.objects.update_or_create(
+                unique_krill_id = unique_id,
+                defaults={'bounding_box_num':str(region_id[i]),'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
+            )
+        # k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Maturity'] )
+        return JsonResponse({
+            'message':"Success!",
+            
+        })
+    except:
+        return JsonResponse({
+        'message':"Error: \n"+ str(sys.exc_info()[1]),
+      
+
+        
+    })
 
 def Load_Image_Annotations(request):
     Images = Image.objects.filter(image=request.POST['image_file'])
