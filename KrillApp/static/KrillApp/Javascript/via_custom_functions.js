@@ -144,29 +144,48 @@ function toggleClicked(){
     image_file = image_file.trim();
     var url = $("#toggle_annotations").attr("ajax-url");
 
+    var image = document.getElementById("current_image").innerHTML;
+
+    image = image.replace($("#delete_photo").attr("media-url"),"");
+    // Removes whitespace
+    image = image.trim();
+
     $.ajax({type: "POST",
     url: url,
     data: {image_file: image_file,
+            image: image,
             'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")},
     success:function(result){
    
 
-        var annotations = result['annotations'];        
+        var annotations = result['annotations'];
+        var region_attributes = result['region_attributes'];
+        console.log(region_attributes);
         if(annotations!=""){
         var m = json_str_to_map( annotations );
+        var r = json_str_to_map(region_attributes);
+
         // Maps key (height, width, name) to value
         for ( var i = 0; i < m.length; i++ ) {
             var region_i = new file_region();
-            var line = JSON.parse(m[i]);
+            var bounding_box=r[i]['image_annotation'];
+            var length=r[i]['length'];
+            var maturity=r[i]['maturity'];
+            
+            bounding_box=bounding_box.replace(/\\/g, '');
+            
+            region_i.shape_attributes = JSON.parse(bounding_box);
+            region_i.region_attributes['Length']=length;
+            region_i.region_attributes['Maturity']=maturity;
+            console.log(region_i);
 
-            region_i.shape_attributes = line;
-            console.log(region_i.shape_attributes);
             for ( var image_id in _via_img_metadata ) {
             _via_img_metadata[image_id].regions.push(region_i);
             }
 
         }
         // Display annotations on image
+        attribute_update_panel_set_active_button();
         update_attributes_update_panel();
         annotation_editor_update_content();
         _via_load_canvas_regions(); // image to canvas space transform
@@ -190,11 +209,12 @@ function user_click_image(path){
 }
 
 function delete_photo(){
-    
-    var image_to_delete = $("#current_image").innerHTML;
+    var image_to_delete= document.getElementById("current_image").innerHTML;
 
+    console.log(image_to_delete);
     // If there there is something to delete
     if (image_to_delete != null){
+
         var url = $("#delete_photo").attr("ajax-url");
     // Removes the django media URL from the URL.
     var media_url = image_to_delete.replace($("#delete_photo").attr("media-url"),"");
@@ -210,7 +230,7 @@ function delete_photo(){
 
     $.ajax({type: "POST",
     url: url,
-    data: {image_url: image_to_delete,
+    data: {image_url: media_url,
             'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")},
     success:function(result){
         trip_change();
@@ -233,7 +253,6 @@ $( document ).ready(function() {
     attribute_update_panel_set_active_button();
     update_attributes_update_panel();
     annotation_editor_update_content();
-    console.log("test");
 });
 
 

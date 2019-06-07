@@ -1,6 +1,7 @@
 from django.http import HttpResponse ,HttpResponseRedirect ,JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render
+from django.core import serializers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from KrillApp.forms import ImageForm ,TripForm
@@ -8,11 +9,15 @@ from KrillApp.models import Image, Trip, Krill
 import scipy.io
 from django.views import View
 from django.templatetags.static import static
+from django.forms.models import model_to_dict
 import os
 import cv2
 import pickle
 import numpy as np
+import json
 import ast
+from django.core.serializers.json import DjangoJSONEncoder
+
 
 
 
@@ -60,7 +65,7 @@ def Get_User_Trips(request):
     return render(request ,'view_trips.html', {'trip_list':trip_list})
 
 
-# FIX DELETE BUG
+# FIX DELETE
 def Get_Trip_Image_List(request):
     sql = 'SELECT * FROM Krillapp_image WHERE trip_name_id="' + str(request.POST['trip_to_get']) + '";'
     trip_image_list = []
@@ -72,6 +77,7 @@ def Get_Trip_Image_List(request):
     })
 
 def Delete_Trip(request):
+
     Trip.objects.filter(trip_name=request.POST['trip_to_delete']).delete()
     return HttpResponseRedirect('/view_trips')
 
@@ -87,7 +93,6 @@ def Upload_Image_To_Trip(request):
 
 
 def Delete_User_Image(request):
-    print(request.POST['image_url'])
     print(Image.objects.filter(image=request.POST['image_url']).delete())
     return HttpResponse('/via')
     
@@ -133,7 +138,6 @@ def Save_Image_Annotations(request):
     image = Image.objects.get(image= str(request.POST['image_file']))
     bounding_boxes = request.POST['image_annotations']
     krill_attributes = request.POST['krill_attributes']
-
     region_id = request.POST['region']
     # Removing the square brackets and quotations from the string
     bounding_boxes = bounding_boxes[2:]
@@ -144,10 +148,10 @@ def Save_Image_Annotations(request):
     region_id = ast.literal_eval(region_id)
 
     for i in range(len(krill_attributes)):
-        unique_id = str(request.POST['image_file']) + "-" + str(region_id[i])
+        unique_id = str(image.file_name) + "-" + str(region_id[i])
         obj, created = Krill.objects.update_or_create(
             unique_krill_id = unique_id,
-            defaults={'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
+            defaults={'bounding_box_num':str(region_id[i]),'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
         )
        # k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Maturity'] )
     return HttpResponse('/via')
@@ -155,8 +159,12 @@ def Save_Image_Annotations(request):
 def Load_Image_Annotations(request):
     Images = Image.objects.filter(image=request.POST['image_file'])
     firstImage = Images.first()
+    krill = Krill.objects.filter(unique_krill_id__contains=str(firstImage.file_name))
+    data = json.dumps(list(krill.values()),cls=DjangoJSONEncoder,ensure_ascii=False)
     return JsonResponse({
         'annotations':firstImage.image_annotations,
+        'region_attributes':data,
+        
     })
 
 #def Pull_SQL_Data():

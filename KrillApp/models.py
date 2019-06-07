@@ -30,8 +30,9 @@ class Image(models.Model):
 
 class Krill(models.Model):
     image_file = models.ForeignKey(Image,on_delete= models.CASCADE,blank=True, null=True)
-    length = models.DecimalField(blank=True,null=True,max_digits=10 ,decimal_places=5)
+    length = models.DecimalField(blank=True,null=True,max_digits=10,default=0,decimal_places=2)
     maturity = models.CharField(blank=True, null=True,max_length=30,default="")
     image_annotation = models.TextField(default="")
+    bounding_box_num = models.CharField(blank=False,null=True,max_length=30)
     unique_krill_id = models.CharField(blank=False,null=False,unique=True,max_length=50)
 
