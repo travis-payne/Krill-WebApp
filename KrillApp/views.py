@@ -238,19 +238,28 @@ def createBoundingBoxes(img, original_image_path):
     # way of going through each contour
 
     regions = []
+    bbs = []
+    #sort the bounding boxes to match sophie's conventions
+    sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0] + cv2.boundingRect(ctr)[1] * original_img.shape[1])
     for i in range(0, num_contours):
-        if not(smallCountourCheck(contours[i], mean_area)):
-            xCoord,yCoord,w,h = cv2.boundingRect(contours[i])
+        if not(smallCountourCheck(sorted_ctrs[i], mean_area)):
+            #xCoord,yCoord,w,h = cv2.boundingRect(contours[i])
+            box =  cv2.boundingRect(sorted_ctrs[i])
             box = {
                 "name": "rect",
-                "x": xCoord,
-                "y": yCoord,
-                "width": w,
-                "height": h
+                "x": box[0],
+                "y": box[1],
+                "width": box[2],
+                "height": box[3]
             }
             regions.append(box)
-            #rectangle = cv2.rectangle(original_img, (x,y), (x+w, y+h), (0, 0, 255), 5)
 
+    #print(regions)
+            #rectangle = cv2.rectangle(original_img, (x,y), (x+w, y+h), (0, 0, 255), 5)
+    #test = sorted(bbs,key=lambda b:b[1][i],reverse=False)
+
+
+    print(regions)
 
  
 
