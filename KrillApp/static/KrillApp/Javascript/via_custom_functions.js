@@ -86,6 +86,14 @@ function save_annotations_to_DB(){
                 'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
             },
             success: function (result) {
+                console.log(result);
+                    $.alert({
+                        title: 'Save Annotations',
+                        content: 'Annotations saved to database!',
+                
+                    });
+                
+            
                 
                
             }
@@ -235,6 +243,7 @@ $( document ).ready(function() {
     annotation_editor_update_content();
     console.log("test");
 });
+
 
 
 
