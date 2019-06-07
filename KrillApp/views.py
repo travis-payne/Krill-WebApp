@@ -81,6 +81,7 @@ def Upload_Image_To_Trip(request):
     trips = Trip.objects.all()
     return render(request,'upload_image_to_trip.html',{'trips':trips})
 
+#def Export_ML_Tings(request):
 
 
 #todo fix lmao
