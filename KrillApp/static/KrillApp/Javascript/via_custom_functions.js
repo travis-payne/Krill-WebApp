@@ -86,15 +86,12 @@ function save_annotations_to_DB(){
                 'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
             },
             success: function (result) {
-                console.log(result);
                     $.alert({
                         title: 'Save Annotations',
-                        content: result['message']
+                        content: "Annotations Saved!",
                 
                     });
-                
-            
-                
+
                
             }
         })
