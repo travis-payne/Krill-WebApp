@@ -2,6 +2,7 @@ from django.http import HttpResponse ,HttpResponseRedirect ,JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.conf import settings
+# from django_excel import make_response_from_tables
 from django.core.files.storage import FileSystemStorage
 from KrillApp.forms import ImageForm ,TripForm
 from KrillApp.models import Image, Trip, Krill 
@@ -14,6 +15,12 @@ import pickle
 import numpy as np
 import ast
 
+#class UploadFileForm(forms.form):
+    #file = forms.FileFeild()
+
+def upload(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
 
 
 

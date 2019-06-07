@@ -141,3 +141,6 @@ LOGOUT_REDIRECT_URL = 'home'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+#handles settings for excel uploads
+FILE_UPLOAD_HANDLES = ("django_excel.ExcelMemoryFileUploadHandler","django_excel.TemporaryExcelFileUploadHandler")
