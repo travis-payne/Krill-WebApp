@@ -147,10 +147,7 @@ def Save_Image_Annotations(request):
     bounding_boxes = bounding_boxes.split('","')
     krill_attributes = ast.literal_eval(krill_attributes)
     region_id = ast.literal_eval(region_id)
-
-    
-   
-        
+    print(krill_attributes)
     for i in range(len(krill_attributes)):
         unique_id = str(image.file_name) + "-" + str(region_id[i])
         obj, created = Krill.objects.update_or_create(
