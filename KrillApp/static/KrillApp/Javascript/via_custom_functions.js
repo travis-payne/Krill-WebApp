@@ -122,6 +122,10 @@ function detect_krill(){
             var region_i = new file_region();
             var line = annotations[i];
             region_i.shape_attributes = line;
+            region_i.region_attributes['Length'] = 0;
+            region_i.region_attributes['Maturity'] = "Unclassified";
+
+
             for ( var image_id in _via_img_metadata ) {
             _via_img_metadata[image_id].regions.push(region_i);
             }
