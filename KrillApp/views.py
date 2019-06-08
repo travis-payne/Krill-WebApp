@@ -5,7 +5,7 @@ from django.core import serializers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from KrillApp.forms import ImageForm ,TripForm
-from KrillApp.models import Image, Trip, Krill 
+from KrillApp.models import Image, Trip, Krill
 import scipy.io
 from django.views import View
 from django.templatetags.static import static
@@ -96,7 +96,7 @@ def Upload_Image_To_Trip(request):
 def Delete_User_Image(request):
     print(Image.objects.filter(image=request.POST['image_url']).delete())
     return HttpResponse('/via')
-    
+
 
 
 def View_Trip_Image(request):
@@ -164,7 +164,7 @@ def Load_Image_Annotations(request):
     return JsonResponse({
         'annotations':firstImage.image_annotations,
         'region_attributes':data,
-        
+
     })
 
 #def Pull_SQL_Data():
@@ -226,11 +226,15 @@ def createBoundingBoxes(img, original_image_path):
 
     mean_area = 0
 
-    for i in range(0, num_contours):
+    max_area = 0
 
+    for i in range(0, num_contours):
+        if cv2.contourArea(contours[i]) > max_area:
+            max_area = cv2.contourArea(contours[i])
         mean_area += cv2.contourArea(contours[i])
 
-    mean_area = mean_area/num_contours
+    mean_area = max_area
+    #mean_area/num_contours
 
     # way of going through each contour
 
@@ -258,14 +262,14 @@ def createBoundingBoxes(img, original_image_path):
 
     print(regions)
 
- 
+
 
     return regions
 #
 # Method to remove very small contour
 #
 def smallCountourCheck(c, mean):
-    return cv2.contourArea(c) < (0.5 * mean)
+    return cv2.contourArea(c) < (0.5 * mean/3)
 
 
 # function to perform opening and closing
