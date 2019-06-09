@@ -234,7 +234,7 @@ def createBoundingBoxes(img, original_image_path):
         mean_area += cv2.contourArea(contours[i])
 
     mean_area = max_area
-    #mean_area/num_contours
+
 
     # way of going through each contour
 
@@ -276,7 +276,7 @@ def createBoundingBoxes(img, original_image_path):
 # Method to remove very small contour
 #
 def smallCountourCheck(c, mean):
-    return cv2.contourArea(c) < (0.5 * mean/5)
+    return cv2.contourArea(c) < (0.5 * mean/10)
 
 
 # function to perform opening and closing
