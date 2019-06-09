@@ -241,7 +241,14 @@ def createBoundingBoxes(img, original_image_path):
     regions = []
     bbs = []
     #sort the bounding boxes to match sophie's conventions
-    sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0] + cv2.boundingRect(ctr)[1] * original_img.shape[1])
+    sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0]*550 + cv2.boundingRect(ctr)[1] * original_img.shape[1])
+
+    #sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0]  * original_img.shape[1])
+
+
+
+
+
     for i in range(0, num_contours):
         if not(smallCountourCheck(sorted_ctrs[i], mean_area)):
             #xCoord,yCoord,w,h = cv2.boundingRect(contours[i])
@@ -269,7 +276,7 @@ def createBoundingBoxes(img, original_image_path):
 # Method to remove very small contour
 #
 def smallCountourCheck(c, mean):
-    return cv2.contourArea(c) < (0.5 * mean/3)
+    return cv2.contourArea(c) < (0.5 * mean/5)
 
 
 # function to perform opening and closing
