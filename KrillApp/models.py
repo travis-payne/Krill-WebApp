@@ -8,7 +8,6 @@ from django.conf import settings
 
 
 # Create your models here.
-
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return 'user_{0}/{1}'.format(instance.user.id, filename)
@@ -34,5 +33,5 @@ class Krill(models.Model):
     maturity = models.CharField(blank=True, null=True,max_length=30,default="")
     image_annotation = models.TextField(default="")
     bounding_box_num = models.CharField(blank=False,null=True,max_length=30)
-    unique_krill_id = models.CharField(blank=False,null=False,unique=True,max_length=50)
+    unique_krill_id = models.CharField(primary_key=True, blank=False,null=False,unique=True,max_length=50)
 

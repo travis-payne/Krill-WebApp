@@ -12,6 +12,7 @@ from django.templatetags.static import static
 from django.forms.models import model_to_dict
 import os
 import cv2
+import csv
 import pickle
 import numpy as np
 import json
@@ -88,7 +89,6 @@ def Upload_Image_To_Trip(request):
     return render(request,'upload_image_to_trip.html',{'trips':trips})
 
 
-
 #todo fix lmao
 
 
@@ -134,7 +134,7 @@ def Load_VIA(request):
 
 def Save_Image_Annotations(request):
     # Saves the annotations to the image table too
-    Image.objects.filter(image= request.POST['image_file']).update(image_annotations =  request.POST['image_annotations'])
+    Image.objects.filter(image= request.POST['image_file']).update(image_annotations=request.POST['image_annotations'])
     image = Image.objects.get(image= str(request.POST['image_file']))
     bounding_boxes = request.POST['image_annotations']
     krill_attributes = request.POST['krill_attributes']
@@ -159,26 +159,32 @@ def Save_Image_Annotations(request):
 
 
 
-#this function handles the uploading of krill instances
-def Upload_Annotations(request, FILE_PATH):
-    if request.method == 'POST':
-        with open(FILE_PATH, 'r') as f:
-            reader = csv.reader(f)
-            #Krill primary key
-            for row in reader:
-                _, created = Krill.objects.update_or_create(
-                    #need to create this on the fly (noye sure how)
-                    #needed to have generatred bounding boxes beforehand
-                    #unique_krill_id=
-                    length = row[3],
-                    maturity = row[4],
-                    #Need to annotate images before hand#
-                    #bounding_box_num =
-                    #Not Sure about this#
-                    #image_file=
-                    #need to check if fields exist?
-                    defaults=
-                )
+# this function handles the adding of sophie's ground truths for the entire cruise.
+# don't need bounding box information
+# Pass in the trip desired as a parameter
+
+def Upload_Annotations_Proper(request, FILE_PATH, TRIP_Desired):
+    # get the unique krill ID, not sure if we need.
+    unique_id = request.POST['unique_krill_id']
+    #get the krill table fields
+    krill_attributes = request.POST['krill_attributes']
+    with open(FILE_PATH, 'r') as f:
+        reader = csv.reader(f)
+        #Calculate the number of krill per image
+        for row in reader:
+            _, created = Krill.objects.update_or_create(
+                unique_krill_id = unique_id,
+                length=row[3],
+                maturity = row[4],
+                #Need to annotate images before hand#
+                #bounding_box_num =
+                #Not Sure about this#
+                #image_file=
+                #need to check if fields exist?
+                #defaults=
+            )
+
+
 
 def Load_Image_Annotations(request):
     Images = Image.objects.filter(image=request.POST['image_file'])
