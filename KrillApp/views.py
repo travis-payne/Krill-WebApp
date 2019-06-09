@@ -220,6 +220,9 @@ def createBoundingBoxes(img, original_image_path):
     # Contours contains the rough co-ordinates of our contours.
     contours = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
 
+    #manually tuned offset, weighting the x-axis order.
+    MAGIC_NUMBER = 550
+
     original_img = cv2.imread(original_image_path, cv2.IMREAD_COLOR)
 
     num_contours = len(contours)
@@ -241,18 +244,16 @@ def createBoundingBoxes(img, original_image_path):
     regions = []
     bbs = []
     #sort the bounding boxes to match sophie's conventions
-    sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0]*550 + cv2.boundingRect(ctr)[1] * original_img.shape[1])
+    sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0]*MAGIC_NUMBER + cv2.boundingRect(ctr)[1] * original_img.shape[1])
 
     #sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0]  * original_img.shape[1])
-
-
 
 
 
     for i in range(0, num_contours):
         if not(smallCountourCheck(sorted_ctrs[i], mean_area)):
             #xCoord,yCoord,w,h = cv2.boundingRect(contours[i])
-            box =  cv2.boundingRect(sorted_ctrs[i])
+            box = cv2.boundingRect(sorted_ctrs[i])
             box = {
                 "name": "rect",
                 "x": box[0],
