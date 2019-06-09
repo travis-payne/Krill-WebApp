@@ -25,7 +25,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 def Upload_Image(request):
     if request.method == 'POST':
-        form = ImageForm(request.POST ,request.FILES)
+        form = ImageForm(request.POST,request.FILES)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user_name = request.user.username
@@ -48,7 +48,7 @@ def Create_Trip(request):
         form = TripForm()
     return render(request,'create_trip.html', {'form':form})
 
-
+#gets and displays user images
 def Get_User_Images(request):
     sql = 'SELECT * FROM Krillapp_image WHERE user_id="' + str(request.user.id) + '";'
     urls = []
@@ -64,7 +64,6 @@ def Get_User_Trips(request):
     for trip in trips:
         trip_list.append(str(trip.trip_name))
     return render(request ,'view_trips.html', {'trip_list':trip_list})
-
 
 # FIX DELETE
 def Get_Trip_Image_List(request):
@@ -156,6 +155,31 @@ def Save_Image_Annotations(request):
         )
     # k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Maturity'] )
     return HttpResponse('/via')
+
+
+
+
+#this function handles the uploading of krill instances
+def Upload_Annotations(request, FILE_PATH):
+    if request.method == 'POST':
+        with open(FILE_PATH, 'r') as f:
+            reader = csv.reader(f)
+            #Krill primary key
+            for row in reader:
+                _, created = Krill.objects.update_or_create(
+                    #need to create this on the fly (noye sure how)
+                    #needed to have generatred bounding boxes beforehand
+                    #unique_krill_id=
+                    length = row[3],
+                    maturity = row[4],
+                    #Need to annotate images before hand#
+                    #bounding_box_num =
+                    #Not Sure about this#
+                    #image_file=
+                    #need to check if fields exist?
+                    defaults=
+                )
+
 def Load_Image_Annotations(request):
     Images = Image.objects.filter(image=request.POST['image_file'])
     firstImage = Images.first()
