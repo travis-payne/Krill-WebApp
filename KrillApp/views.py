@@ -149,11 +149,11 @@ def Save_Image_Annotations(request):
     region_id = ast.literal_eval(region_id)
     for i in range(len(krill_attributes)):
         unique_id = str(image.file_name) + "-" + str(region_id[i])
+        box_info = ast.literal_eval(bounding_boxes[i].replace("\\",""))
         obj, created = Krill.objects.update_or_create(
             unique_krill_id = unique_id,
-            defaults={'bounding_box_num':str(region_id[i]),'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
+            defaults={'x':box_info['x'],'y':box_info['y'],'width':box_info['width'],'height':box_info['height'],'bounding_box_num':str(region_id[i]),'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
         )
-    # k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Maturity'] )
     return HttpResponse('/via')
 
 

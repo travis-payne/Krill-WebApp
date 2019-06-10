@@ -723,8 +723,10 @@
     $(function() {
       $('#toggle_annotations').change(function() {
         if ($(this).prop('checked')){
-
-          toggleClicked();
+          if(_via_canvas_regions.length ==0){
+            toggleClicked();
+          }
+          
         }
         else{
         _via_canvas_regions  = [];
