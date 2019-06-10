@@ -259,7 +259,10 @@ def createBoundingBoxes(img, original_image_path):
             max_area = cv2.contourArea(contours[i])
         mean_area += cv2.contourArea(contours[i])
 
-    mean_area = mean_area / num_contours
+    mean_area = max_area
+
+    #Use this for images 255 ~ 68-74
+    #mean_area = mean_area / num_contours
 
 
     # way of going through each contour
