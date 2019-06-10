@@ -5,19 +5,21 @@ from django.core import serializers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from KrillApp.forms import ImageForm ,TripForm
-from KrillApp.models import Image, Trip, Krill 
+from KrillApp.models import Image, Trip, Krill
 import scipy.io
 from django.views import View
 from django.templatetags.static import static
 from django.forms.models import model_to_dict
 import os
 import cv2
+import csv
 import pickle
 import numpy as np
 import json
 import ast
 import sys
 from django.core.serializers.json import DjangoJSONEncoder
+import csvsqlite3
 
 
 
@@ -25,7 +27,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 def Upload_Image(request):
     if request.method == 'POST':
-        form = ImageForm(request.POST ,request.FILES)
+        form = ImageForm(request.POST,request.FILES)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user_name = request.user.username
@@ -48,7 +50,7 @@ def Create_Trip(request):
         form = TripForm()
     return render(request,'create_trip.html', {'form':form})
 
-
+#gets and displays user images
 def Get_User_Images(request):
     sql = 'SELECT * FROM Krillapp_image WHERE user_id="' + str(request.user.id) + '";'
     urls = []
@@ -64,7 +66,6 @@ def Get_User_Trips(request):
     for trip in trips:
         trip_list.append(str(trip.trip_name))
     return render(request ,'view_trips.html', {'trip_list':trip_list})
-
 
 # FIX DELETE
 def Get_Trip_Image_List(request):
@@ -89,14 +90,13 @@ def Upload_Image_To_Trip(request):
     return render(request,'upload_image_to_trip.html',{'trips':trips})
 
 
-
 #todo fix lmao
 
 
 def Delete_User_Image(request):
     print(Image.objects.filter(image=request.POST['image_url']).delete())
     return HttpResponse('/via')
-    
+
 
 
 def View_Trip_Image(request):
@@ -110,7 +110,6 @@ class BasicUploadView(View):
 
     def post(self, request):
         form = ImageForm(self.request.POST, self.request.FILES)
-        print(form.errors)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.trip_name = Trip.objects.get(trip_name__exact=request.POST['trip_name'])
@@ -135,8 +134,9 @@ def Load_VIA(request):
 
 def Save_Image_Annotations(request):
     # Saves the annotations to the image table too
-    Image.objects.filter(image= request.POST['image_file']).update(image_annotations =  request.POST['image_annotations'])
+    Image.objects.filter(image= request.POST['image_file']).update(image_annotations=request.POST['image_annotations'])
     image = Image.objects.get(image= str(request.POST['image_file']))
+    print(Krill.objects.filter(unique_krill_id__contains=str(image.file_name)).delete())
     bounding_boxes = request.POST['image_annotations']
     krill_attributes = request.POST['krill_attributes']
     region_id = request.POST['region']
@@ -147,15 +147,20 @@ def Save_Image_Annotations(request):
     bounding_boxes = bounding_boxes.split('","')
     krill_attributes = ast.literal_eval(krill_attributes)
     region_id = ast.literal_eval(region_id)
-    print(krill_attributes)
     for i in range(len(krill_attributes)):
         unique_id = str(image.file_name) + "-" + str(region_id[i])
+        box_info = ast.literal_eval(bounding_boxes[i].replace("\\",""))
         obj, created = Krill.objects.update_or_create(
             unique_krill_id = unique_id,
-            defaults={'bounding_box_num':str(region_id[i]),'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
+            defaults={'x':box_info['x'],'y':box_info['y'],'width':box_info['width'],'height':box_info['height'],'bounding_box_num':str(region_id[i]),'unique_krill_id' :unique_id,'image_file':image,'image_annotation':bounding_boxes[i],'length':krill_attributes[i]['Length'],'maturity':krill_attributes[i]['Maturity']}
         )
-    # k = Krill.objects.create(image_file=image,image_annotation = bounding_boxes[i] ,length =krill_attributes[i]['Length'],maturity = krill_attributes[i]['Maturity'] )
     return HttpResponse('/via')
+
+
+
+
+
+
 def Load_Image_Annotations(request):
     Images = Image.objects.filter(image=request.POST['image_file'])
     firstImage = Images.first()
@@ -164,10 +169,28 @@ def Load_Image_Annotations(request):
     return JsonResponse({
         'annotations':firstImage.image_annotations,
         'region_attributes':data,
-        
+
     })
 
-#def Pull_SQL_Data():
+def Pull_From_CSV(request):
+    image = Image.objects.get(image= str(request.POST['image']))
+    conn = csvsqlite3.connect('JR255A.csv')
+    cur = conn.cursor()
+    cur.execute("select * from csv WHERE image_name='"+ str(image.file_name) +"'")
+    excel_data = cur.fetchall()
+
+    krill_to_update = Krill.objects.filter(unique_krill_id__contains=str(image.file_name))
+    for i in range(len(excel_data)):
+        if i < len(excel_data):
+            test = krill_to_update[i]
+            test.length = excel_data[i][3]
+            test.maturity = excel_data[i][4]
+            test.save()
+    conn.close()
+    return JsonResponse({
+            'num_pulled':len(excel_data),
+    })
+
 
 
 
@@ -220,28 +243,40 @@ def createBoundingBoxes(img, original_image_path):
     # Contours contains the rough co-ordinates of our contours.
     contours = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
 
+    #manually tuned offset, weighting the x-axis order.
+    MAGIC_NUMBER = 550
+
     original_img = cv2.imread(original_image_path, cv2.IMREAD_COLOR)
 
     num_contours = len(contours)
 
     mean_area = 0
 
-    for i in range(0, num_contours):
+    max_area = 0
 
+    for i in range(0, num_contours):
+        if cv2.contourArea(contours[i]) > max_area:
+            max_area = cv2.contourArea(contours[i])
         mean_area += cv2.contourArea(contours[i])
 
-    mean_area = mean_area/num_contours
+    mean_area = max_area
+
 
     # way of going through each contour
 
     regions = []
     bbs = []
     #sort the bounding boxes to match sophie's conventions
-    sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0] + cv2.boundingRect(ctr)[1] * original_img.shape[1])
+    sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0]*MAGIC_NUMBER + cv2.boundingRect(ctr)[1] * original_img.shape[1])
+
+    #sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0]  * original_img.shape[1])
+
+
+
     for i in range(0, num_contours):
         if not(smallCountourCheck(sorted_ctrs[i], mean_area)):
             #xCoord,yCoord,w,h = cv2.boundingRect(contours[i])
-            box =  cv2.boundingRect(sorted_ctrs[i])
+            box = cv2.boundingRect(sorted_ctrs[i])
             box = {
                 "name": "rect",
                 "x": box[0],
@@ -256,16 +291,14 @@ def createBoundingBoxes(img, original_image_path):
     #test = sorted(bbs,key=lambda b:b[1][i],reverse=False)
 
 
-    print(regions)
 
- 
 
     return regions
 #
 # Method to remove very small contour
 #
 def smallCountourCheck(c, mean):
-    return cv2.contourArea(c) < (0.5 * mean)
+    return cv2.contourArea(c) < (0.5 * mean/10)
 
 
 # function to perform opening and closing
