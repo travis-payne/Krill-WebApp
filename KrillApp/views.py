@@ -12,7 +12,6 @@ from django.templatetags.static import static
 from django.forms.models import model_to_dict
 import os
 import cv2
-import csv
 import pickle
 import numpy as np
 import json
@@ -20,6 +19,18 @@ import ast
 import sys
 from django.core.serializers.json import DjangoJSONEncoder
 import csvsqlite3
+import csv
+import smtplib
+import threading
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+from email.utils import COMMASPACE
+from email import encoders
+import io
+
+
 
 
 
@@ -191,6 +202,81 @@ def Pull_From_CSV(request):
             'num_pulled':len(excel_data),
     })
 
+def Export_To_CSV(request):
+    trip = str(request.POST['trip'])
+    thread=threading.Thread(target=Extract_And_Send_CSV,args=(trip,))
+    thread.daemon=True
+    thread.start()
+    #response = HttpResponse(content_type='text/csv')
+    #response['Content-Disposition'] = 'attachment; filename="'+request.POST['trip']+'.csv"'
+
+    #krill = Krill.objects.filter(unique_krill_id__contains=str(request.POST['trip'])).values('length','maturity','x','y','width','height','image_file_id')
+    #krill = list(krill)
+    #writer = csv.writer(response)
+    # # Header Row
+    # i=0
+    # length = len(krill)
+    # writer.writerow(['Length','Maturity','x','y','width','height','image','image_name'])
+    # for row in krill:
+    #     print(str(i) + "/" + str(len(krill)))
+    #     x=int(row['x'])
+    #     y=int(row['y'])
+    #     w=int(row['width'])
+    #     h=int(row['height'])
+    #     image = Image.objects.get(file_name=row['image_file_id'])
+    #     image = cv2.imread("media/"+str(image.image))
+    #     image = image[y:y+h,x:x+w]
+    #     writer.writerow([row['length'],row['maturity'],row['x'],row['y'],row['width'],row['height'],image],row['image_file_id'])
+    #     i=i+1
+    #return response
+    return HttpResponseRedirect('/view_trips')
+
+def Extract_And_Send_CSV(trip):
+    i=0
+    
+    csvfile = io.StringIO()
+    writer = csv.writer(csvfile)
+    writer.writerow(['Length','Maturity','x','y','width','height','image','image_name'])
+    krill = Krill.objects.filter(unique_krill_id__contains=trip).values('length','maturity','x','y','width','height','image_file_id')
+    krill = list(krill)
+    length = len(krill)
+    print("Begin Krill Extraction")
+    for row in krill:
+        print(str(i) + "/" + str(len(krill)))
+        x=int(row['x'])
+        y=int(row['y'])
+        w=int(row['width'])
+        h=int(row['height'])
+        image = Image.objects.get(file_name=row['image_file_id'])
+        image = cv2.imread("media/"+str(image.image))
+        image = image[y:y+h,x:x+w]
+        writer.writerow([row['length'],row['maturity'],row['x'],row['y'],row['width'],row['height'],image,row['image_file_id']])
+        i=i+1
+    
+    SUBJECT = 'Subject string'
+    FILENAME = str(trip)+'.csv'
+    MY_EMAIL = 'uea.krill.annotation@gmail.com'
+    MY_PASSWORD = 'Krill123'
+    TO_EMAIL = 'travis.james.payne@gmail.com'
+    SMTP_SERVER = 'smtp.gmail.com'
+    SMTP_PORT = 587
+
+    msg = MIMEMultipart()
+    msg['From'] = MY_EMAIL
+    msg['To'] = COMMASPACE.join([TO_EMAIL])
+    msg['Subject'] = SUBJECT
+
+    part = MIMEBase('application', "octet-stream")
+    part.set_payload(csvfile.getvalue())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', 'attachment', filename=FILENAME)
+    msg.attach(part)
+    smtpObj = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+    smtpObj.ehlo()
+    smtpObj.starttls()
+    smtpObj.login(MY_EMAIL, MY_PASSWORD)
+    smtpObj.sendmail(MY_EMAIL, TO_EMAIL, msg.as_string())
+    smtpObj.quit()
 
 
 
