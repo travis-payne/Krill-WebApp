@@ -19,7 +19,7 @@ import json
 import ast
 import sys
 from django.core.serializers.json import DjangoJSONEncoder
-import csvsqlite3
+
 
 
 
