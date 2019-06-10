@@ -244,7 +244,7 @@ def createBoundingBoxes(img, original_image_path):
     contours = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
 
     #manually tuned offset, weighting the x-axis order.
-    MAGIC_NUMBER = 550
+    MAGIC_NUMBER = 750
 
     original_img = cv2.imread(original_image_path, cv2.IMREAD_COLOR)
 
