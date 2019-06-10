@@ -41,6 +41,7 @@ urlpatterns = [
     path("save_image_annotations/",views.Save_Image_Annotations,name='save_image_annotations'),
     path("load_image_annotations/",views.Load_Image_Annotations,name='load_image_annotations'),
     path("detect_krill/",views.Detect_Krill,name='detect_krill'),
+    path("pull_from_csv/",views.Pull_From_CSV,name='pull_from_csv'),
 
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

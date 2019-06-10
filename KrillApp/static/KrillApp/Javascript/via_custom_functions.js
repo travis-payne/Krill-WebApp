@@ -149,6 +149,10 @@ function detect_krill(){
 
 function toggleClicked(){
 
+    _via_canvas_regions = [];
+    _via_load_canvas_regions(); // image to canvas space transform
+    _via_redraw_reg_canvas();
+    _via_reg_canvas.focus();
     var image_file = document.getElementById("current_image").innerHTML;
     image_file = image_file.trim();
     var url = $("#toggle_annotations").attr("ajax-url");
@@ -169,7 +173,6 @@ function toggleClicked(){
 
         var annotations = result['annotations'];
         var region_attributes = result['region_attributes'];
-        console.log(region_attributes);
         if(annotations!=""){
         var m = json_str_to_map( annotations );
         var r = json_str_to_map(region_attributes);
@@ -186,7 +189,6 @@ function toggleClicked(){
             region_i.shape_attributes = JSON.parse(bounding_box);
             region_i.region_attributes['Length']=length;
             region_i.region_attributes['Maturity']=maturity;
-            console.log(region_i);
 
             for ( var image_id in _via_img_metadata ) {
             _via_img_metadata[image_id].regions.push(region_i);
@@ -220,7 +222,6 @@ function user_click_image(path){
 function delete_photo(){
     var image_to_delete= document.getElementById("current_image").innerHTML;
 
-    console.log(image_to_delete);
     // If there there is something to delete
     if (image_to_delete != null){
 
@@ -243,7 +244,6 @@ function delete_photo(){
             'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")},
     success:function(result){
         trip_change();
-        //user_click_image(($("#delete_photo").attr("media-url"),"") + $("#gallery tbody").parent().siblings(":first").text());
 
     }})
         
@@ -251,6 +251,28 @@ function delete_photo(){
     
 
 }
+
+function pull_from_csv(){
+    var image_to_pull= document.getElementById("current_image").innerHTML;
+    image_to_pull = image_to_pull.replace($("#delete_photo").attr("media-url"),"");
+    console.log(image_to_pull);
+    image_to_pull = image_to_pull.trim();
+    if (image_to_pull != null){
+    $.ajax({type: "POST",
+    url: "/pull_from_csv/",
+    data: {image: image_to_pull,
+            'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")},
+    success:function(result){
+        $.alert({
+            title: 'Summary',
+            content: result['num_pulled']+ " rows pulled from csv file.",
+    
+        });
+    }})
+        
+    }
+}
+
 
 $( document ).ready(function() {
     _via_attributes['region']['Length'] = {type: "text",description:"",default_value:""};
@@ -262,6 +284,7 @@ $( document ).ready(function() {
     attribute_update_panel_set_active_button();
     update_attributes_update_panel();
     annotation_editor_update_content();
+
 });
 
 

@@ -19,6 +19,7 @@ import json
 import ast
 import sys
 from django.core.serializers.json import DjangoJSONEncoder
+import csvsqlite3
 
 
 
@@ -109,7 +110,6 @@ class BasicUploadView(View):
 
     def post(self, request):
         form = ImageForm(self.request.POST, self.request.FILES)
-        print(form.errors)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.trip_name = Trip.objects.get(trip_name__exact=request.POST['trip_name'])
@@ -136,6 +136,7 @@ def Save_Image_Annotations(request):
     # Saves the annotations to the image table too
     Image.objects.filter(image= request.POST['image_file']).update(image_annotations=request.POST['image_annotations'])
     image = Image.objects.get(image= str(request.POST['image_file']))
+    print(Krill.objects.filter(unique_krill_id__contains=str(image.file_name)).delete())
     bounding_boxes = request.POST['image_annotations']
     krill_attributes = request.POST['krill_attributes']
     region_id = request.POST['region']
@@ -146,7 +147,6 @@ def Save_Image_Annotations(request):
     bounding_boxes = bounding_boxes.split('","')
     krill_attributes = ast.literal_eval(krill_attributes)
     region_id = ast.literal_eval(region_id)
-    print(krill_attributes)
     for i in range(len(krill_attributes)):
         unique_id = str(image.file_name) + "-" + str(region_id[i])
         obj, created = Krill.objects.update_or_create(
@@ -158,31 +158,6 @@ def Save_Image_Annotations(request):
 
 
 
-
-# this function handles the adding of sophie's ground truths for the entire cruise.
-# don't need bounding box information
-# Pass in the trip desired as a parameter
-
-def Upload_Annotations_Proper(request, FILE_PATH, TRIP_Desired):
-    # get the unique krill ID, not sure if we need.
-    unique_id = request.POST['unique_krill_id']
-    #get the krill table fields
-    krill_attributes = request.POST['krill_attributes']
-    with open(FILE_PATH, 'r') as f:
-        reader = csv.reader(f)
-        #Calculate the number of krill per image
-        for row in reader:
-            _, created = Krill.objects.update_or_create(
-                unique_krill_id = unique_id,
-                length=row[3],
-                maturity = row[4],
-                #Need to annotate images before hand#
-                #bounding_box_num =
-                #Not Sure about this#
-                #image_file=
-                #need to check if fields exist?
-                #defaults=
-            )
 
 
 
@@ -197,7 +172,25 @@ def Load_Image_Annotations(request):
 
     })
 
-#def Pull_SQL_Data():
+def Pull_From_CSV(request):
+    image = Image.objects.get(image= str(request.POST['image']))
+    conn = csvsqlite3.connect('JR255A.csv')
+    cur = conn.cursor()
+    cur.execute("select * from csv WHERE image_name='"+ str(image.file_name) +"'")
+    excel_data = cur.fetchall()
+
+    krill_to_update = Krill.objects.filter(unique_krill_id__contains=str(image.file_name))
+    for i in range(len(excel_data)):
+        if i < len(excel_data):
+            test = krill_to_update[i]
+            test.length = excel_data[i][3]
+            test.maturity = excel_data[i][4]
+            test.save()
+    conn.close()
+    return JsonResponse({
+            'num_pulled':len(excel_data),
+    })
+
 
 
 
@@ -297,8 +290,6 @@ def createBoundingBoxes(img, original_image_path):
             #rectangle = cv2.rectangle(original_img, (x,y), (x+w, y+h), (0, 0, 255), 5)
     #test = sorted(bbs,key=lambda b:b[1][i],reverse=False)
 
-
-    print(regions)
 
 
 
