@@ -16,6 +16,7 @@
 
     <div id ="view_trips_buttons">
         <a style="display:block" id="trip_button" class="btn btn-primary" href = "{% url 'upload_image_to_trip' %}">Upload New Image </a>
+        <a style="display:block" id="export_to_csv" onclick="export_trip_to_csv()"  class="btn btn-primary">Export Trip Data to CSV</a>
         <a style="display:block" id="delete_trip" ajax-url = "{% url 'delete_trip' %}"  class="btn btn-primary">Delete Trip </a>
     </div>
 <br />

@@ -121,3 +121,7 @@ $(function () {
 
 
 
+function export_trip_to_csv(){
+
+    console.log("woops");
+}
