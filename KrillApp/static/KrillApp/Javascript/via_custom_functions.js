@@ -266,6 +266,13 @@ function pull_from_csv(){
         $.alert({
             title: 'Summary',
             content: result['num_pulled']+ " rows pulled from csv file.",
+            buttons:{
+                OK: function(){
+
+        	    $('#toggle_annotations').bootstrapToggle('toggle');
+        		$('#toggle_annotations').bootstrapToggle('toggle');
+                }
+            }
     
         });
     }})

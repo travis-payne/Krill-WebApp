@@ -31,11 +31,6 @@ from email import encoders
 import io
 
 
-
-
-
-
-
 def Upload_Image(request):
     if request.method == 'POST':
         form = ImageForm(request.POST,request.FILES)

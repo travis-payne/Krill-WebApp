@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4a13c99-066b-43b7-a230-9672c00fbbec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/KrillApp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/KrillApp/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_custom_functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_custom_functions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/KrillApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/KrillApp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
@@ -48,23 +49,52 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_custom_functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="833">
-              <caret line="49" column="9" selection-start-line="49" selection-start-column="9" selection-end-line="49" selection-end-column="9" />
+            <state relative-caret-position="291">
+              <caret line="272" column="67" selection-start-line="272" selection-start-column="67" selection-end-line="272" selection-end-column="67" />
+              <folding>
+                <element signature="n#!!block;n#save_annotations_to_DB#0" />
+                <element signature="n#!!block;n#detect_krill#0" />
+                <element signature="n#!!block;n#toggleClicked#0" />
+                <element signature="n#!!block;n#user_click_image#0" />
+                <element signature="n#!!block;n#delete_photo#0" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/KrillApp/templates/view_trips.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-372" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/KrillApp/templates/via.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="236">
+              <caret line="723" column="28" selection-start-line="723" selection-start-column="10" selection-end-line="723" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/view_trips.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="147" column="44" selection-start-line="147" selection-start-column="44" selection-end-line="147" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/KrillApp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="149" column="42" lean-forward="true" selection-start-line="149" selection-start-column="4" selection-end-line="149" selection-end-column="42" />
-              <folding>
-                <element signature="e#0#72#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-2363">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
             </state>
           </provider>
         </entry>
@@ -74,6 +104,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>segmentKrill</find>
+      <find>toggle_anno</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -84,11 +115,12 @@
       <list>
         <option value="$PROJECT_DIR$/KrillApp/models.py" />
         <option value="$PROJECT_DIR$/KrillApp/views.py" />
+        <option value="$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_custom_functions.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-7" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="953" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
   </component>
@@ -97,7 +129,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -127,9 +158,7 @@
               <item name="Krill-WebApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="Krill-WebApp" type="462c0819:PsiDirectoryNode" />
               <item name="KrillApp" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="KrillApp" type="462c0819:PsiDirectoryNode" />
-              <item name="Javascript" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Krill-WebApp" type="b2602c69:ProjectViewProjectNode" />
@@ -140,6 +169,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -211,22 +241,23 @@
       <workItem from="1559735845884" duration="271000" />
       <workItem from="1559927784920" duration="4340000" />
       <workItem from="1560099060687" duration="8470000" />
+      <workItem from="1560258730904" duration="1156000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23899000" />
+    <option name="totallyTimeSpent" value="25055000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="974" height="1047" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.06892779" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1673774" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.09299781" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3938731" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.39328277" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.2702407" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -275,20 +306,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/KrillApp/views.py</url>
-          <line>264</line>
+          <line>338</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_custom_functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="49" column="9" selection-start-line="49" selection-start-column="9" selection-end-line="49" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/jquery.fileupload.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -311,16 +335,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/KrillApp/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/KrillApp/templates/create_trip.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -338,12 +352,52 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/view_trips.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="147" column="44" selection-start-line="147" selection-start-column="44" selection-end-line="147" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/KrillApp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="149" column="42" lean-forward="true" selection-start-line="149" selection-start-column="4" selection-end-line="149" selection-end-column="42" />
+        <state relative-caret-position="-2363">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/KrillApp/templates/view_trips.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-372" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/KrillApp/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
           <folding>
-            <element signature="e#0#72#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/KrillApp/templates/via.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="723" column="28" selection-start-line="723" selection-start-column="10" selection-end-line="723" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_custom_functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="272" column="67" selection-start-line="272" selection-start-column="67" selection-end-line="272" selection-end-column="67" />
+          <folding>
+            <element signature="n#!!block;n#save_annotations_to_DB#0" />
+            <element signature="n#!!block;n#detect_krill#0" />
+            <element signature="n#!!block;n#toggleClicked#0" />
+            <element signature="n#!!block;n#user_click_image#0" />
+            <element signature="n#!!block;n#delete_photo#0" />
           </folding>
         </state>
       </provider>
