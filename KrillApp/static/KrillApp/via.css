@@ -205,3 +205,18 @@ body { min-width:200px; padding:0; margin:0; font-family:sans-serif; }
       .narrow_page_content { width:60%; }
 
       .force_small_font { font-size:small !important; }
+
+
+#view_trips_buttons{
+    margin: 0 auto;
+    text-align: center;
+    color:white;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.btn-primary {
+    margin: 2% 0;
+    cursor: pointer;
+
+}

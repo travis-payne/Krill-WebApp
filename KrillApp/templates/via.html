@@ -281,19 +281,22 @@
           </table>
 
         </div>
-        <p>
+
 
           <div class="button_panel">
-            <span id="delete_photo" media-url="{{ MEDIA_URL}}" ajax-url="{% url 'delete_image' %}" class="button"
+<div id ="view_trips_buttons">
+
+            <span style="display:block;text-align: center" id="delete_photo" media-url="{{ MEDIA_URL}}" ajax-url="{% url 'delete_image' %}" class="btn btn-primary"
               onclick="delete_photo()" title="Remove selected file (i.e. file currently being shown) from trip">Delete
               Selected Photo</span>
-            <span id="save_annotations" ajax-url= "{% url 'save_image_annotations' %}" media-url="{{ MEDIA_URL}}"
-              class="button" onclick="save_annotations_to_DB()" title="">Save Annotations</span>
-              <span id="detect_krill" ajax-url-2= "{% url 'detect_krill' %}" media-url="{{ MEDIA_URL}}" ajax-url="{% url 'detect_krill' %}"
-              class="button" onclick="detect_krill()" title="">Detect Krill</span>
-              <span id="pull_csv_data" class="button" onclick="pull_from_csv()" title="">Pull photo csv data</span>
+            <span style="display:block;text-align: center" id="save_annotations" ajax-url= "{% url 'save_image_annotations' %}" media-url="{{ MEDIA_URL}}"
+              class="btn btn-primary" onclick="save_annotations_to_DB()" title="">Save Annotations</span>
+              <span style="display:block;text-align: center" id="detect_krill" ajax-url-2= "{% url 'detect_krill' %}" media-url="{{ MEDIA_URL}}" ajax-url="{% url 'detect_krill' %}"
+              class="btn btn-primary" onclick="detect_krill()" title="">Detect Krill</span>
+              <span style="display:block;text-align: center" id="pull_csv_data" class="btn btn-primary" onclick="pull_from_csv()" title="">Pull Photo CSV Data</span>
+            <span style="display:block;text-align: center" id="sort_boxes" class="btn btn-primary" onclick="sort_boxes()" title="">Sort Boxes</span>
           </div>
-        </p>
+          </div>
       </div>
 
       <!-- Attributes -->

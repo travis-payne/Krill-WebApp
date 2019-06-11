@@ -202,28 +202,6 @@ def Export_To_CSV(request):
     thread=threading.Thread(target=Extract_And_Send_CSV,args=(trip,))
     thread.daemon=True
     thread.start()
-    #response = HttpResponse(content_type='text/csv')
-    #response['Content-Disposition'] = 'attachment; filename="'+request.POST['trip']+'.csv"'
-
-    #krill = Krill.objects.filter(unique_krill_id__contains=str(request.POST['trip'])).values('length','maturity','x','y','width','height','image_file_id')
-    #krill = list(krill)
-    #writer = csv.writer(response)
-    # # Header Row
-    # i=0
-    # length = len(krill)
-    # writer.writerow(['Length','Maturity','x','y','width','height','image','image_name'])
-    # for row in krill:
-    #     print(str(i) + "/" + str(len(krill)))
-    #     x=int(row['x'])
-    #     y=int(row['y'])
-    #     w=int(row['width'])
-    #     h=int(row['height'])
-    #     image = Image.objects.get(file_name=row['image_file_id'])
-    #     image = cv2.imread("media/"+str(image.image))
-    #     image = image[y:y+h,x:x+w]
-    #     writer.writerow([row['length'],row['maturity'],row['x'],row['y'],row['width'],row['height'],image],row['image_file_id'])
-    #     i=i+1
-    #return response
     return HttpResponseRedirect('/view_trips')
 
 def Extract_And_Send_CSV(trip):
@@ -273,6 +251,25 @@ def Extract_And_Send_CSV(trip):
     smtpObj.sendmail(MY_EMAIL, TO_EMAIL, msg.as_string())
     smtpObj.quit()
 
+def Sort_Boxes(request):
+    list = []
+    MAGIC_NUMBER = 550
+    image = Image.objects.get(image=str(request.POST['image_file']))
+    image = cv2.imread("media/" + str(image.image))
+    bounding_boxes = request.POST['image_annotations']
+    # Removing the square brackets and quotations from the string
+    bounding_boxes = bounding_boxes[2:]
+    bounding_boxes = bounding_boxes[:-2]
+    # Split the string into individual annotations
+    bounding_boxes = bounding_boxes.split('","')
+    for i in bounding_boxes:
+        list.append(ast.literal_eval(i.replace("\\", "")))
+
+    sorted_ctrs = sorted(list, key=lambda box: box['x']*MAGIC_NUMBER + box['y'] * image.shape[1])
+
+    return JsonResponse({
+        'annotations': sorted_ctrs,
+    })
 
 
 def Detect_Krill(request):

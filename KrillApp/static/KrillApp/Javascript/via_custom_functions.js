@@ -105,6 +105,9 @@ function save_annotations_to_DB(){
 }
 
 function detect_krill(){
+    sel_all_regions();
+    console.log("HEY!!!!!!");
+    del_sel_regions();
     var image_file = document.getElementById("current_image").innerHTML;
     image_file = image_file.trim();
 
@@ -149,10 +152,8 @@ function detect_krill(){
 
 function toggleClicked(){
 
-    _via_canvas_regions = [];
-    _via_load_canvas_regions(); // image to canvas space transform
-    _via_redraw_reg_canvas();
-    _via_reg_canvas.focus();
+    sel_all_regions();
+    del_sel_regions();
     var image_file = document.getElementById("current_image").innerHTML;
     image_file = image_file.trim();
     var url = $("#toggle_annotations").attr("ajax-url");
@@ -278,6 +279,88 @@ function pull_from_csv(){
     }})
         
     }
+}
+
+function sort_boxes(){
+      var csvline = [];
+    var csvArray= [];
+
+    var csvlineAttributes = [];
+    var csvArrayAttributes= [];
+    var region_ids = [];
+
+    for ( var image_id in _via_img_metadata ) {
+        var r = _via_img_metadata[image_id].regions;
+        if ( r.length !==0 ) {
+          for ( var i = 0; i < r.length; ++i ) {
+            // Shape attributes are HERE.
+            var sattr = map_to_json( r[i].shape_attributes );
+            csvline.push(sattr);
+
+            // Region Attributes
+            var rattr = map_to_json( r[i].region_attributes );
+            rattr = '"' +  escape_for_csv( rattr ) + '"';
+            csvlineAttributes.push(r[i].region_attributes);
+            region_ids.push(r[i].region_id);
+          }
+        }
+      }
+      if(csvlineAttributes.length != 0){
+          csvArrayAttributes = csvlineAttributes;
+            csvlineAttributes = JSON.stringify(csvlineAttributes);
+      }
+      else{
+          csvlineAttributes = "";
+      }
+
+      if(csvline.length != 0){
+        csvArray = csvline;
+        csvline = JSON.stringify(csvline);
+    }
+    else{
+        csvline = "";
+    }
+     var image = document.getElementById("current_image").innerHTML;
+      image = image.replace($("#delete_photo").attr("media-url"),"");
+      // Removes whitespace
+      image = image.trim();
+    $.ajax({
+            type: "POST",
+            url: "/sort_boxes/",
+            data: {
+                image_file: image,
+                image_annotations: JSON.stringify(csvArray),
+                'csrfmiddlewaretoken': document.getElementById('trip_list').getAttribute("data-token")
+            },
+            success: function (result) {
+                sel_all_regions();
+                del_sel_regions();
+
+                 var annotations = result['annotations'];
+        // Maps key (height, width, name) to value
+        for ( var i = 0; i < annotations.length; i++ ) {
+            var region_i = new file_region();
+            var line = annotations[i];
+            region_i.shape_attributes = line;
+            region_i.region_attributes['Length'] = 0;
+            region_i.region_attributes['Maturity'] = "Unclassified";
+
+
+            for ( var image_id in _via_img_metadata ) {
+            _via_img_metadata[image_id].regions.push(region_i);
+            }
+
+        }
+        // Display annotations on image
+        update_attributes_update_panel();
+        annotation_editor_update_content();
+        _via_load_canvas_regions(); // image to canvas space transform
+        _via_redraw_reg_canvas();
+        _via_reg_canvas.focus();
+
+            }
+        })
+
 }
 
 

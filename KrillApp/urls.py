@@ -43,6 +43,7 @@ urlpatterns = [
     path("detect_krill/",views.Detect_Krill,name='detect_krill'),
     path("pull_from_csv/",views.Pull_From_CSV,name='pull_from_csv'),
     path("export_to_csv/",views.Export_To_CSV,name='export_to_csv'),
+    path("sort_boxes/",views.Sort_Boxes,name='sort_boxes'),
 
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
