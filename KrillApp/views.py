@@ -336,8 +336,6 @@ def segmentKrill(normalisedImg,  histogram_object, FAST):
     # logical matrix for segmented image
     logicalImg = cv2.cvtColor(normalisedImg, cv2.COLOR_BGR2GRAY)
 
-    # get the float representation
-    # floatRep =  normalisedImg.astype(float)
 
     # new quantised image
     normalisedImg[:, :, 0] = (normalisedImg[:, :, 0] / 255 * qLevels)
