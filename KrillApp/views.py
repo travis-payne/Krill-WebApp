@@ -206,7 +206,6 @@ def Export_To_CSV(request):
 
 def Extract_And_Send_CSV(trip):
     i=0
-    
     csvfile = io.StringIO()
     writer = csv.writer(csvfile)
     writer.writerow(['Length','Maturity','x','y','width','height','image','image_name'])

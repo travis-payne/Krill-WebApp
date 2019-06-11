@@ -5602,6 +5602,7 @@ function project_file_remove_confirmed(input) {
 
 
 function project_remove_file(img_index) {
+  console.log("DEKETE");
   if ( img_index < 0 || img_index >= _via_img_count ) {
     console.log('project_remove_file(): invalid img_index ' + img_index);
     return;

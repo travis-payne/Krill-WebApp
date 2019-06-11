@@ -111,7 +111,7 @@
       if (data.result.is_valid) {
         DJANGO_MEDIA_URL = '{{MEDIA_URL}}';
         $("#gallery tbody").prepend(
-          "<tr><td><a href='" + DJANGO_MEDIA_URL + data.result.url + "'>" + data.result.url +"</a></td></tr>"
+          "<tr><td><p>" + data.result.url +"</p></td></tr>"
         )
       }
     }
