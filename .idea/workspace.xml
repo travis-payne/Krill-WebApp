@@ -2,118 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4a13c99-066b-43b7-a230-9672c00fbbec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_ui_functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_ui_functions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KrillApp/templates/upload_image_to_trip.html" beforeDir="false" afterPath="$PROJECT_DIR$/KrillApp/templates/upload_image_to_trip.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KrillApp/templates/via.html" beforeDir="false" afterPath="$PROJECT_DIR$/KrillApp/templates/via.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_1.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_10.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_100.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_101.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_102.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_103.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_104.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_105.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_106.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_107.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_108.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_11.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_12.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_13.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_14.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_15.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_16.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_17.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_18.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_19.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_2.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_20.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_21.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_22.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_23.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_24.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_25.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_26.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_27.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_28.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_29.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_3.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_30.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_31.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_32.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_33.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_34.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_35.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_36.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_37.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_38.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_39.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_4.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_40.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_41.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_42.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_43.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_44.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_45.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_46.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_47.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_48.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_49.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_5.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_50.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_51.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_52.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_53.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_54.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_55.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_56.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_57.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_58.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_59.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_6.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_60.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_61.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_62.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_63.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_64.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_65.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_66.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_67.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_68.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_69.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_7.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_70.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_71.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_72.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_73.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_74.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_75.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_76.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_77.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_78.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_79.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_8.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_80.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_81.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_82.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_83.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_84.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_85.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_86.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_87.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_88.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_89.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_9.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_90.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_91.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_92.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_93.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_94.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_95.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_96.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_97.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_98.JPG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/user_1/JR255A_krill_image_99.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KrillApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/KrillApp/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -209,10 +98,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/KrillApp/KrillDetection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-663">
+            <state relative-caret-position="170">
+              <caret line="49" column="48" lean-forward="true" selection-start-line="49" selection-start-column="48" selection-end-line="49" selection-end-column="48" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -247,11 +137,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/KrillApp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="270" column="34" selection-start-line="270" selection-start-column="34" selection-end-line="270" selection-end-column="34" />
+            <state relative-caret-position="44">
+              <caret line="206" column="31" selection-start-line="206" selection-start-column="31" selection-end-line="206" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -286,11 +176,11 @@
         <option value="$PROJECT_DIR$/KrillApp/static/KrillApp/view_trips.css" />
         <option value="$PROJECT_DIR$/KrillApp/static/KrillApp/via.css" />
         <option value="$PROJECT_DIR$/KrillApp/urls.py" />
-        <option value="$PROJECT_DIR$/KrillApp/views.py" />
         <option value="$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_custom_functions.js" />
         <option value="$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_ui_functions.js" />
         <option value="$PROJECT_DIR$/KrillApp/templates/via.html" />
         <option value="$PROJECT_DIR$/KrillApp/templates/upload_image_to_trip.html" />
+        <option value="$PROJECT_DIR$/KrillApp/views.py" />
       </list>
     </option>
   </component>
@@ -424,12 +314,12 @@
       <workItem from="1559735845884" duration="271000" />
       <workItem from="1559927784920" duration="4340000" />
       <workItem from="1560099060687" duration="8470000" />
-      <workItem from="1560258730904" duration="4329000" />
+      <workItem from="1560258730904" duration="4896000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28228000" />
+    <option name="totallyTimeSpent" value="28795000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -574,13 +464,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/KrillApp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="270" column="34" selection-start-line="270" selection-start-column="34" selection-end-line="270" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/KrillApp/static/KrillApp/Javascript/via_ui_functions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="142">
@@ -636,10 +519,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/KrillApp/KrillDetection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-663">
+        <state relative-caret-position="170">
+          <caret line="49" column="48" lean-forward="true" selection-start-line="49" selection-start-column="48" selection-end-line="49" selection-end-column="48" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/KrillApp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="206" column="31" selection-start-line="206" selection-start-column="31" selection-end-line="206" selection-end-column="31" />
         </state>
       </provider>
     </entry>

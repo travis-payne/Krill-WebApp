@@ -205,25 +205,21 @@ def Export_To_CSV(request):
     return HttpResponseRedirect('/view_trips')
 
 def Extract_And_Send_CSV(trip):
-    i=0
     csvfile = io.StringIO()
     writer = csv.writer(csvfile)
     writer.writerow(['Length','Maturity','x','y','width','height','image','image_name'])
     krill = Krill.objects.filter(unique_krill_id__contains=trip).values('length','maturity','x','y','width','height','image_file_id')
     krill = list(krill)
-    length = len(krill)
-    print("Begin Krill Extraction")
     for row in krill:
-        print(str(i) + "/" + str(len(krill)))
-        x=int(row['x'])
-        y=int(row['y'])
-        w=int(row['width'])
-        h=int(row['height'])
-        image = Image.objects.get(file_name=row['image_file_id'])
-        image = cv2.imread("media/"+str(image.image))
-        image = image[y:y+h,x:x+w]
-        writer.writerow([row['length'],row['maturity'],row['x'],row['y'],row['width'],row['height'],image,row['image_file_id']])
-        i=i+1
+        if(row['maturity']!="Unclassified"):
+            x=int(row['x'])
+            y=int(row['y'])
+            w=int(row['width'])
+            h=int(row['height'])
+            image = Image.objects.get(file_name=row['image_file_id'])
+            image = cv2.imread("media/"+str(image.image))
+            image = image[y:y+h,x:x+w]
+            writer.writerow([row['length'],row['maturity'],row['x'],row['y'],row['width'],row['height'],image,row['image_file_id']])
     
     SUBJECT = 'Subject string'
     FILENAME = str(trip)+'.csv'
